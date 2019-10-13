@@ -7,3 +7,11 @@ export interface RouteNode {
   handle?(req, res, next);
   routes?: RouteNode[];
 }
+
+export enum Elements {
+  Route = "ROUTE",
+  Middleware = "MIDDLEWARE",
+  Express = "EXPRESS",
+  Root = "ROOT",
+  ErrorHandler = "ERRORHANDLER"
+}

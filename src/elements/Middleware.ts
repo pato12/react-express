@@ -1,5 +1,5 @@
 import { RouteNode } from "@root/types";
-import { flatten, mergePath } from "@root/utils";
+import { flatten } from "@root/utils";
 
 import INode from "@elements/Node";
 

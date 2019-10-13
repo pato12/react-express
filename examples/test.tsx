@@ -1,4 +1,4 @@
-import { Renderer, Express, Middleware, Route } from "../src";
+import { Renderer, Express, Middleware, Route, ErrorHandler } from "../src";
 import React from "react";
 
 const handleTest = () => {};
@@ -6,6 +6,7 @@ const handlePostProduct = () => {};
 const handleGetProducts = () => {};
 const handleGetProduct = () => {};
 const handleMiddleware = () => {};
+const handleErrorHandler = () => {};
 
 const CustomRouter = () => (
   <Middleware handle={handleTest}>
@@ -45,5 +46,7 @@ Renderer.compile(
     </Middleware>
 
     <CustomRouter />
+
+    <ErrorHandler handle={handleErrorHandler} />
   </Express>
 );

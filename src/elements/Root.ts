@@ -1,4 +1,4 @@
-import { RouteNode } from "@root/types";
+import { RouteNode, Elements } from "@root/types";
 import { flatten, mergePath } from "@root/utils";
 
 import INode from "@elements/Node";
@@ -18,31 +18,28 @@ class RootInstance extends INode<RootInstance> {
     };
   }
 
-  mapNode(node: RouteNode): RouteNode {
+  mapNode = (node: RouteNode): RouteNode => {
     const { path } = this.props;
 
-    if (node.type === "ROUTE") {
+    if (node.type === Elements.Route) {
       return {
         ...node,
         path: mergePath(path, node.path)
       };
-    } else if (node.type === "MIDDLEWARE") {
+    } else if (node.type === Elements.Middleware) {
       return {
         ...node,
-        path: node.path ? mergePath(path, node.path) : node.path,
-        routes: node.routes
-          ? node.routes.map(this.mapNode.bind(this))
-          : node.routes
+        path: node.path ? mergePath(path, node.path) : undefined,
+        routes: node.routes ? node.routes.map(this.mapNode) : undefined
       };
     }
 
     return node;
-  }
+  };
 
   render() {
-    return flatten<RouteNode>(this.childs.map(c => c.render())).map(
-      this.mapNode.bind(this)
-    );
+    const nodes = flatten<RouteNode>(this.childs.map(c => c.render()));
+    return nodes.map(this.mapNode);
   }
 }
 
