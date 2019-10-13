@@ -1,0 +1,20 @@
+{
+  "name": "react-express",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node -r tsconfig-paths/register examples/test"
+  },
+  "devDependencies": {
+    "@types/node": "^12.7.12",
+    "@types/react-reconciler": "^0.18.0",
+    "ts-node": "^8.4.1",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^3.6.4"
+  },
+  "dependencies": {
+    "react": "^16.10.2",
+    "react-reconciler": "^0.22.2"
+  }
+}
