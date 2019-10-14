@@ -63,8 +63,10 @@ const routes = Renderer.compile(
   </Express>
 );
 
-const app = Renderer.generate(routes);
+console.log(JSON.stringify(routes, null, 4));
 
-app.listen(3000, function() {
-  console.log("Example app listening on port 3000!");
-});
+// const app = Renderer.generate(routes);
+
+// app.listen(3000, function() {
+//   console.log("Example app listening on port 3000!");
+// });

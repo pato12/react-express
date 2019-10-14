@@ -84,9 +84,9 @@ const CustomRenderer = {
 
     reconcilerInstance.updateContainer(element, mountNode, null);
 
-    return rootContainer.render() as RouteNode[];
+    return rootContainer.render() as RouteNode;
   },
-  generate(compiled: RouteNode[]) {
+  generate(compiled: RouteNode) {
     return generateExpressRoutes(compiled);
   }
 };

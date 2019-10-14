@@ -4,10 +4,8 @@ import { RouteNode, Elements } from "@root/types";
 
 function generateExpressRoutes(
   routes: RouteNode[],
-  baseRouter?: express.Router
-): express.Express {
-  const router = baseRouter || express();
-
+  baseRouter: express.Router
+): express.Router {
   for (const route of routes) {
     if (
       route.type === Elements.Middleware &&
@@ -15,7 +13,7 @@ function generateExpressRoutes(
       route.handle &&
       !route.routes
     ) {
-      router.use(route.path, route.handle);
+      baseRouter.use(route.path, route.handle);
     } else if (
       route.type === Elements.Middleware &&
       route.path &&
@@ -27,7 +25,7 @@ function generateExpressRoutes(
 
       nextBaseRouter.use(route.path, route.handle);
 
-      router.use(generateExpressRoutes(route.routes, nextBaseRouter));
+      baseRouter.use(generateExpressRoutes(route.routes, nextBaseRouter));
     } else if (
       route.type === Elements.Middleware &&
       route.handle &&
@@ -38,48 +36,61 @@ function generateExpressRoutes(
 
       nextBaseRouter.use(route.handle);
 
-      router.use(generateExpressRoutes(route.routes, nextBaseRouter));
+      baseRouter.use(generateExpressRoutes(route.routes, nextBaseRouter));
     } else if (route.type === Elements.Middleware && route.handle) {
-      router.use(route.handle);
+      baseRouter.use(route.handle);
     } else if (
       route.type === Elements.Route &&
       route.handle &&
       route.path &&
       route.method === "GET"
     ) {
-      router.get(route.path, route.handle);
+      baseRouter.get(route.path, route.handle);
     } else if (
       route.type === Elements.Route &&
       route.handle &&
       route.path &&
       route.method === "POST"
     ) {
-      router.post(route.path, route.handle);
+      baseRouter.post(route.path, route.handle);
     } else if (
       route.type === Elements.Route &&
       route.handle &&
       route.path &&
       route.method === "PUT"
     ) {
-      router.put(route.path, route.handle);
+      baseRouter.put(route.path, route.handle);
     } else if (
       route.type === Elements.Route &&
       route.handle &&
       route.path &&
       route.method === "DELETE"
     ) {
-      router.delete(route.path, route.handle);
+      baseRouter.delete(route.path, route.handle);
     } else if (
       route.type === Elements.Route &&
       route.handle &&
       route.path &&
       route.method === "OPTIONS"
     ) {
-      router.options(route.path, route.handle);
+      baseRouter.options(route.path, route.handle);
     }
   }
 
-  return router as any;
+  return baseRouter;
 }
 
-export default generateExpressRoutes;
+function generateExpress(node: RouteNode): express.Express {
+  const app = express();
+  const baseRouter = express.Router();
+
+  if (node.type !== Elements.Express) {
+    throw new Error("The initial node must be Express");
+  }
+
+  baseRouter.use(generateExpressRoutes(node.routes!, baseRouter));
+
+  return app;
+}
+
+export default generateExpress;

@@ -21,22 +21,27 @@ describe("Error Handler", () => {
         <Route method="POST" path="/test" handle={handlerRoute} />
         <ErrorHandler handle={handlerError} />
       </Express>
-    ) as RouteNode[];
+    ) as RouteNode;
 
-    expect(compiled[0].type).toBe(Elements.Route);
-    expect(compiled[0].path).toBe("/test");
-    expect(compiled[0].method).toBe("GET");
-    expect(compiled[0].handle).toBe(handlerRoute);
+    expect(compiled.type).toBe(Elements.Express);
+    expect(compiled.path).toBe("/");
+    expect(compiled.method).toBeUndefined();
+    expect(compiled.handle).toBeUndefined();
 
-    expect(compiled[1].type).toBe(Elements.Route);
-    expect(compiled[1].path).toBe("/test");
-    expect(compiled[1].method).toBe("POST");
-    expect(compiled[1].handle).toBe(handlerRoute);
+    expect(compiled.routes![0].type).toBe(Elements.Route);
+    expect(compiled.routes![0].path).toBe("/test");
+    expect(compiled.routes![0].method).toBe("GET");
+    expect(compiled.routes![0].handle).toBe(handlerRoute);
 
-    expect(compiled[2].type).toBe(Elements.ErrorHandler);
-    expect(compiled[2].path).toBeUndefined();
-    expect(compiled[2].method).toBeUndefined();
-    expect(compiled[2].handle).toBe(handlerError);
+    expect(compiled.routes![1].type).toBe(Elements.Route);
+    expect(compiled.routes![1].path).toBe("/test");
+    expect(compiled.routes![1].method).toBe("POST");
+    expect(compiled.routes![1].handle).toBe(handlerRoute);
+
+    expect(compiled.routes![2].type).toBe(Elements.ErrorHandler);
+    expect(compiled.routes![2].path).toBeUndefined();
+    expect(compiled.routes![2].method).toBeUndefined();
+    expect(compiled.routes![2].handle).toBe(handlerError);
   });
 
   test("Test routes and errorhandler at top", () => {
@@ -46,22 +51,27 @@ describe("Error Handler", () => {
         <Route method="GET" path="/test" handle={handlerRoute} />
         <Route method="POST" path="/test" handle={handlerRoute} />
       </Express>
-    ) as RouteNode[];
+    );
 
-    expect(compiled[0].type).toBe(Elements.Route);
-    expect(compiled[0].path).toBe("/test");
-    expect(compiled[0].method).toBe("GET");
-    expect(compiled[0].handle).toBe(handlerRoute);
+    expect(compiled.type).toBe(Elements.Express);
+    expect(compiled.path).toBe("/");
+    expect(compiled.method).toBeUndefined();
+    expect(compiled.handle).toBeUndefined();
 
-    expect(compiled[1].type).toBe(Elements.Route);
-    expect(compiled[1].path).toBe("/test");
-    expect(compiled[1].method).toBe("POST");
-    expect(compiled[1].handle).toBe(handlerRoute);
+    expect(compiled.routes![0].type).toBe(Elements.Route);
+    expect(compiled.routes![0].path).toBe("/test");
+    expect(compiled.routes![0].method).toBe("GET");
+    expect(compiled.routes![0].handle).toBe(handlerRoute);
 
-    expect(compiled[2].type).toBe(Elements.ErrorHandler);
-    expect(compiled[2].path).toBeUndefined();
-    expect(compiled[2].method).toBeUndefined();
-    expect(compiled[2].handle).toBe(handlerError);
+    expect(compiled.routes![1].type).toBe(Elements.Route);
+    expect(compiled.routes![1].path).toBe("/test");
+    expect(compiled.routes![1].method).toBe("POST");
+    expect(compiled.routes![1].handle).toBe(handlerRoute);
+
+    expect(compiled.routes![2].type).toBe(Elements.ErrorHandler);
+    expect(compiled.routes![2].path).toBeUndefined();
+    expect(compiled.routes![2].method).toBeUndefined();
+    expect(compiled.routes![2].handle).toBe(handlerError);
   });
 
   test("Test routes and twice errorhandler", () => {
@@ -73,7 +83,7 @@ describe("Error Handler", () => {
           <Route method="GET" path="/test" handle={handlerRoute} />
           <Route method="POST" path="/test" handle={handlerRoute} />
         </Express>
-      ) as RouteNode[];
+      );
 
     expect(compile).toThrowError();
   });
@@ -88,7 +98,7 @@ describe("Error Handler", () => {
             <ErrorHandler handle={handlerError} />
           </Route>
         </Express>
-      ) as RouteNode[];
+      );
 
     expect(compile).toThrowError();
   });
@@ -103,7 +113,7 @@ describe("Error Handler", () => {
             <ErrorHandler handle={handlerError} />
           </Middleware>
         </Express>
-      ) as RouteNode[];
+      );
 
     expect(compile).toThrowError();
   });

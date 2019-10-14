@@ -25,6 +25,16 @@ class RootInstance extends INode<RootInstance> {
 
     twiceErrorHandler(sortedNodes);
 
+    if (this.type === Elements.Express) {
+      return {
+        type: this.type,
+        path: this.props.path,
+        routes: sortedNodes
+      };
+    } else if (this.type === Elements.Root) {
+      return sortedNodes[0];
+    }
+
     return sortedNodes;
   }
 }
