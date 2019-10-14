@@ -1,6 +1,6 @@
 import Reconciler from "react-reconciler";
-import { Props } from "@root/types";
-import { createInstance } from "@elements";
+import { Props, Elements } from "@root/types";
+import { createInstance } from "@root/elements";
 
 const HostConfig = {
   now: Date.now,
@@ -78,12 +78,12 @@ const reconcilerInstance = Reconciler(HostConfig);
 
 const CustomRenderer = {
   compile(element) {
-    const rootContainer = createInstance("ROOT");
+    const rootContainer = createInstance(Elements.Root);
     const mountNode = reconcilerInstance.createContainer(rootContainer);
 
     reconcilerInstance.updateContainer(element, mountNode, null);
 
-    console.log(JSON.stringify(rootContainer.render(), null, 4));
+    return rootContainer.render();
   }
 };
 

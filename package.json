@@ -4,11 +4,24 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node -r tsconfig-paths/register examples/test"
+    "dev": "ts-node -r tsconfig-paths/register examples/example1",
+    "build": "rm -rf dist && babel examples --out-dir dist --extensions .ts,.tsx,.js",
+    "test": "jest"
   },
   "devDependencies": {
+    "@babel/cli": "^7.6.4",
+    "@babel/core": "^7.6.4",
+    "@babel/node": "^7.6.3",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-transform-runtime": "^7.6.2",
+    "@babel/preset-env": "^7.6.3",
+    "@babel/preset-react": "^7.6.3",
+    "@babel/preset-typescript": "^7.6.0",
+    "@babel/runtime": "^7.6.3",
+    "@types/jest": "^24.0.18",
     "@types/node": "^12.7.12",
     "@types/react-reconciler": "^0.18.0",
+    "jest": "^24.9.0",
     "ts-node": "^8.4.1",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^3.6.4"

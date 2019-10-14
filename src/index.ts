@@ -1,4 +1,4 @@
-import Renderer from "@renderer";
+import Renderer from "@root/renderer";
 import { Elements } from "@root/types";
 
 const Express = Elements.Express as any;

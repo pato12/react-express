@@ -1,7 +1,7 @@
 import { RouteNode, Elements } from "@root/types";
-import { flatten, mergePath } from "@root/utils";
+import { flatten, mapNode } from "@root/utils";
 
-import INode from "@elements/Node";
+import INode from "@root/elements/Node";
 
 interface RootInstance {
   path: string;
@@ -18,29 +18,24 @@ class RootInstance extends INode<RootInstance> {
     };
   }
 
-  mapNode = (node: RouteNode): RouteNode => {
-    const { path } = this.props;
+  render(): RouteNode | RouteNode[] {
+    const nodes = flatten<RouteNode>(this.childs.map(c => c.render()));
+    const sortedNodes = nodes.map(mapNode(this.props)).sort(sortErrorHandler);
 
-    if (node.type === Elements.Route) {
-      return {
-        ...node,
-        path: mergePath(path, node.path)
-      };
-    } else if (node.type === Elements.Middleware) {
-      return {
-        ...node,
-        path: node.path ? mergePath(path, node.path) : undefined,
-        routes: node.routes ? node.routes.map(this.mapNode) : undefined
-      };
+    const errorHandlers = sortedNodes.filter(
+      n => n.type === Elements.ErrorHandler
+    );
+
+    if (errorHandlers.length > 1) {
+      throw new Error("Error there are twice error handler.");
     }
 
-    return node;
-  };
-
-  render() {
-    const nodes = flatten<RouteNode>(this.childs.map(c => c.render()));
-    return nodes.map(this.mapNode);
+    return sortedNodes;
   }
 }
 
 export default RootInstance;
+
+function sortErrorHandler(a, b) {
+  return a.type === Elements.ErrorHandler ? 1 : 0;
+}
