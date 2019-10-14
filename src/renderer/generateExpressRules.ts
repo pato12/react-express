@@ -2,9 +2,9 @@ import express from "express";
 
 import { RouteNode, Elements } from "@root/types";
 
-function generateExpressRoutes(
+export function generateExpressRoutes(
   routes: RouteNode[],
-  baseRouter: express.Router
+  baseRouter: express.Router = express.Router()
 ): express.Router {
   for (const route of routes) {
     if (
@@ -80,7 +80,7 @@ function generateExpressRoutes(
   return baseRouter;
 }
 
-function generateExpress(node: RouteNode): express.Express {
+export function generateExpressApp(node: RouteNode): express.Express {
   const app = express();
   const baseRouter = express.Router();
 
@@ -93,5 +93,3 @@ function generateExpress(node: RouteNode): express.Express {
 
   return app;
 }
-
-export default generateExpress;

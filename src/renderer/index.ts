@@ -1,7 +1,8 @@
 import Reconciler from "react-reconciler";
 import { Props, Elements, RouteNode } from "@root/types";
 import { createInstance } from "@root/elements";
-import generateExpressRoutes from "./generateExpressRules";
+
+import { generateExpressApp } from "./generateExpressRules";
 
 const HostConfig = {
   now: Date.now,
@@ -87,7 +88,7 @@ const CustomRenderer = {
     return rootContainer.render() as RouteNode;
   },
   generate(compiled: RouteNode) {
-    return generateExpressRoutes(compiled);
+    return generateExpressApp(compiled);
   }
 };
 
