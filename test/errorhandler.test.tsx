@@ -97,7 +97,7 @@ describe("Error Handler", () => {
     const compile = () =>
       Renderer.compile(
         <Express>
-          <Middleware path="/test">
+          <Middleware path="/test" handle={handlerMiddleware}>
             <Route method="GET" handle={handlerRoute} />
             <Route method="POST" handle={handlerRoute} />
             <ErrorHandler handle={handlerError} />

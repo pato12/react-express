@@ -1,10 +1,6 @@
 import React from "react";
 
-import {
-  Renderer,
-  Express,
-  Route,
-} from "@root/index";
+import { Renderer, Express, Route } from "@root/index";
 import { RouteNode, Elements } from "@root/types";
 
 const handlerRoute = Object.freeze(() => {});
@@ -124,5 +120,78 @@ describe("Test routes", () => {
     expect(compiled[9].path).toBe("/test/test5/test8");
     expect(compiled[9].method).toBe("GET");
     expect(compiled[9].handle).toBe(handlerRoute);
+  });
+});
+
+describe("Extra test routes", () => {
+  test("Using custom component", () => {
+    const CustomComponent = () => (
+      <Route path="/pato">
+        <Route method="GET" handle={handlerRoute} />
+        <Route method="POST" handle={handlerRoute} />
+      </Route>
+    );
+    const compiled = Renderer.compile(
+      <Express>
+        <Route method="GET" path="/test" handle={handlerRoute} />
+        <Route method="POST" path="/test" handle={handlerRoute} />
+        <CustomComponent />
+      </Express>
+    ) as RouteNode[];
+
+    expect(compiled[0].type).toBe(Elements.Route);
+    expect(compiled[0].path).toBe("/test");
+    expect(compiled[0].method).toBe("GET");
+    expect(compiled[0].handle).toBe(handlerRoute);
+
+    expect(compiled[1].type).toBe(Elements.Route);
+    expect(compiled[1].path).toBe("/test");
+    expect(compiled[1].method).toBe("POST");
+    expect(compiled[1].handle).toBe(handlerRoute);
+
+    expect(compiled[2].type).toBe(Elements.Route);
+    expect(compiled[2].path).toBe("/pato");
+    expect(compiled[2].method).toBe("GET");
+    expect(compiled[2].handle).toBe(handlerRoute);
+
+    expect(compiled[3].type).toBe(Elements.Route);
+    expect(compiled[3].path).toBe("/pato");
+    expect(compiled[3].method).toBe("POST");
+    expect(compiled[3].handle).toBe(handlerRoute);
+  });
+  test("Using react fragment", () => {
+    const compiled = Renderer.compile(
+      <Express>
+        <Route method="GET" path="/test" handle={handlerRoute} />
+        <Route method="POST" path="/test" handle={handlerRoute} />
+        <React.Fragment>
+          <Route path="/pato">
+            <Route method="GET" handle={handlerRoute} />
+            <Route method="POST" handle={handlerRoute} />
+          </Route>
+        </React.Fragment>
+      </Express>
+    ) as RouteNode[];
+
+    expect(compiled[0].type).toBe(Elements.Route);
+    expect(compiled[0].path).toBe("/test");
+    expect(compiled[0].method).toBe("GET");
+    expect(compiled[0].handle).toBe(handlerRoute);
+
+    expect(compiled[1].type).toBe(Elements.Route);
+    expect(compiled[1].path).toBe("/test");
+    expect(compiled[1].method).toBe("POST");
+    expect(compiled[1].handle).toBe(handlerRoute);
+
+
+    expect(compiled[2].type).toBe(Elements.Route);
+    expect(compiled[2].path).toBe("/pato");
+    expect(compiled[2].method).toBe("GET");
+    expect(compiled[2].handle).toBe(handlerRoute);
+
+    expect(compiled[3].type).toBe(Elements.Route);
+    expect(compiled[3].path).toBe("/pato");
+    expect(compiled[3].method).toBe("POST");
+    expect(compiled[3].handle).toBe(handlerRoute);
   });
 });

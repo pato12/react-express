@@ -1,35 +1,47 @@
 import { Renderer, Express, Middleware, Route, ErrorHandler } from "../src";
 import React from "react";
+import express from "express";
 
-const handleTest = () => {};
-const handlePostProduct = () => {};
-const handleGetProducts = () => {};
-const handleGetProduct = () => {};
-const handleMiddleware = () => {};
-const handleErrorHandler = () => {};
+const defaultHandler = (req: express.Request, res: express.Response) => {
+  res.send(`OK: ${req.path}`);
+};
 
-const CustomRouter = () => (
-  <Middleware handle={handleTest}>
-    <Middleware handle={handleTest}>
-      <Route path="/pepe">
-        <Middleware handle={handleTest} />
-        <Middleware handle={handleTest} />
+const defaultMiddleware = (
+  req: express.Request,
+  res: express.Response,
+  next
+) => {
+  console.log(`OK: ${req.path}`);
+  next();
+};
 
-        <Route path="/asd" method="GET" handle={handleTest} />
+const handleTest = defaultHandler;
+const handlePostProduct = defaultHandler;
+const handleGetProducts = defaultHandler;
+const handleGetProduct = defaultHandler;
+const handleMiddleware = defaultMiddleware;
+const handleErrorHandler = defaultHandler;
 
-        <Route path="/asd2">
-          <Route path="/asd" method="GET" handle={handleTest} />
-        </Route>
-        <Route method="GET" handle={handleTest} />
-      </Route>
-    </Middleware>
-  </Middleware>
-);
+// const CustomRouter = () => (
+//   <Middleware handle={handleTest}>
+//     <Middleware handle={handleTest}>
+//       <Route path="/pepe">
+//         <Middleware handle={handleTest} />
+//         <Middleware handle={handleTest} />
 
-Renderer.compile(
-  <Express path="/app">
-    <Middleware handle={handleMiddleware} />
-    <Middleware handle={handleMiddleware} />
+//         <Route path="/asd" method="GET" handle={handleTest} />
+
+//         <Route path="/asd2">
+//           <Route path="/asd" method="GET" handle={handleTest} />
+//         </Route>
+//         <Route method="GET" handle={handleTest} />
+//       </Route>
+//     </Middleware>
+//   </Middleware>
+// );
+
+const routes = Renderer.compile(
+  <Express>
     <Middleware handle={handleMiddleware} />
 
     <Route method="GET" path="/test" handle={handleTest} />
@@ -45,8 +57,14 @@ Renderer.compile(
       <Route method="GET" path="/test2" handle={handleTest} />
     </Middleware>
 
-    <CustomRouter />
-
-    <ErrorHandler handle={handleErrorHandler} />
+    <React.Fragment>
+      <ErrorHandler handle={handleErrorHandler} />
+    </React.Fragment>
   </Express>
 );
+
+const app = Renderer.generate(routes);
+
+app.listen(3000, function() {
+  console.log("Example app listening on port 3000!");
+});
