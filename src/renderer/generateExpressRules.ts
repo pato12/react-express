@@ -89,6 +89,7 @@ function generateExpress(node: RouteNode): express.Express {
   }
 
   baseRouter.use(generateExpressRoutes(node.routes!, baseRouter));
+  app.use(baseRouter);
 
   return app;
 }

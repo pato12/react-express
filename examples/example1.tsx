@@ -65,8 +65,8 @@ const routes = Renderer.compile(
 
 console.log(JSON.stringify(routes, null, 4));
 
-// const app = Renderer.generate(routes);
+const app = Renderer.generate(routes);
 
-// app.listen(3000, function() {
-//   console.log("Example app listening on port 3000!");
-// });
+app.listen(3000, function() {
+  console.log("Example app listening on port 3000!");
+});
