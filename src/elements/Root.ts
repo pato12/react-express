@@ -2,6 +2,7 @@ import { RouteNode, Elements } from "@root/types";
 import { flatten, mapNode } from "@root/utils";
 
 import INode from "@root/elements/Node";
+import { twiceErrorHandler } from "@root/validation/errorHandler";
 
 interface RootInstance {
   path: string;
@@ -22,13 +23,7 @@ class RootInstance extends INode<RootInstance> {
     const nodes = flatten<RouteNode>(this.childs.map(c => c.render()));
     const sortedNodes = nodes.map(mapNode(this.props)).sort(sortErrorHandler);
 
-    const errorHandlers = sortedNodes.filter(
-      n => n.type === Elements.ErrorHandler
-    );
-
-    if (errorHandlers.length > 1) {
-      throw new Error("Error there are twice error handler.");
-    }
+    twiceErrorHandler(sortedNodes);
 
     return sortedNodes;
   }

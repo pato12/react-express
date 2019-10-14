@@ -1,7 +1,8 @@
-import { RouteNode, Elements } from "@root/types";
+import { RouteNode } from "@root/types";
 import { flatten, mapNode } from "@root/utils";
 
 import INode from "@root/elements/Node";
+import { noErrorHandler } from "@root/validation/errorHandler";
 
 class RouteInstance extends INode<RouteNode> {
   render(): RouteNode | RouteNode[] {
@@ -20,15 +21,7 @@ class RouteInstance extends INode<RouteNode> {
       this.childs.map(c => c.render())
     ).map(mapNode(this.props));
 
-    const errorHandlers = flattenedRoutes.filter(
-      n => n.type === Elements.ErrorHandler
-    );
-
-    if (errorHandlers.length > 0) {
-      throw new Error(
-        "Error there are error handler inside the route component. Must be inside Express."
-      );
-    }
+    noErrorHandler(flattenedRoutes);
 
     return flattenedRoutes;
   }
