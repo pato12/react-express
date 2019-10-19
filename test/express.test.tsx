@@ -7,7 +7,8 @@ import {
   Route,
   ErrorHandler
 } from "@root/index";
-import { RouteNode, Elements } from "@root/types";
+import { Elements } from "@root/types";
+import { DEFAULT_PATH } from "@root/utils";
 
 const handlerMiddleware = Object.freeze(() => {});
 const handlerRoute = Object.freeze(() => {});
@@ -28,12 +29,12 @@ describe("Test root path", () => {
     expect(compiled.handle).toBeUndefined();
 
     expect(compiled.routes![0].type).toBe(Elements.Route);
-    expect(compiled.routes![0].path).toBe("/app/test");
+    expect(compiled.routes![0].path).toBe("/test");
     expect(compiled.routes![0].method).toBe("GET");
     expect(compiled.routes![0].handle).toBe(handlerRoute);
 
     expect(compiled.routes![1].type).toBe(Elements.Route);
-    expect(compiled.routes![1].path).toBe("/app/test");
+    expect(compiled.routes![1].path).toBe("/test");
     expect(compiled.routes![1].method).toBe("POST");
     expect(compiled.routes![1].handle).toBe(handlerRoute);
   });
@@ -54,14 +55,18 @@ describe("Test root path", () => {
     expect(compiled.handle).toBeUndefined();
 
     expect(compiled.routes![0].type).toBe(Elements.Route);
-    expect(compiled.routes![0].path).toBe("/app/test");
-    expect(compiled.routes![0].method).toBe("GET");
-    expect(compiled.routes![0].handle).toBe(handlerRoute);
+    expect(compiled.routes![0].path).toBe("/test");
+    expect(compiled.routes![0].method).toBeUndefined();
 
-    expect(compiled.routes![1].type).toBe(Elements.Route);
-    expect(compiled.routes![1].path).toBe("/app/test");
-    expect(compiled.routes![1].method).toBe("POST");
-    expect(compiled.routes![1].handle).toBe(handlerRoute);
+    expect(compiled.routes![0].routes![0].type).toBe(Elements.Route);
+    expect(compiled.routes![0].routes![0].path).toBe(DEFAULT_PATH);
+    expect(compiled.routes![0].routes![0].method).toBe("GET");
+    expect(compiled.routes![0].routes![0].handle).toBe(handlerRoute);
+
+    expect(compiled.routes![0].routes![1].type).toBe(Elements.Route);
+    expect(compiled.routes![0].routes![1].path).toBe(DEFAULT_PATH);
+    expect(compiled.routes![0].routes![1].method).toBe("POST");
+    expect(compiled.routes![0].routes![1].handle).toBe(handlerRoute);
   });
 
   test("Test route with two childs with root path and two global middleware", () => {
@@ -93,14 +98,19 @@ describe("Test root path", () => {
     expect(compiled.routes![1].handle).toBe(handlerMiddleware);
 
     expect(compiled.routes![2].type).toBe(Elements.Route);
-    expect(compiled.routes![2].path).toBe("/app/test");
-    expect(compiled.routes![2].method).toBe("GET");
-    expect(compiled.routes![2].handle).toBe(handlerRoute);
+    expect(compiled.routes![2].method).toBeUndefined();
+    expect(compiled.routes![2].handle).toBeUndefined();
+    expect(compiled.routes![2].path).toBe("/test");
 
-    expect(compiled.routes![3].type).toBe(Elements.Route);
-    expect(compiled.routes![3].path).toBe("/app/test");
-    expect(compiled.routes![3].method).toBe("POST");
-    expect(compiled.routes![3].handle).toBe(handlerRoute);
+    expect(compiled.routes![2].routes![0].type).toBe(Elements.Route);
+    expect(compiled.routes![2].routes![0].method).toBe("GET");
+    expect(compiled.routes![2].routes![0].path).toBe(DEFAULT_PATH);
+    expect(compiled.routes![2].routes![0].handle).toBe(handlerRoute);
+
+    expect(compiled.routes![2].routes![1].type).toBe(Elements.Route);
+    expect(compiled.routes![2].routes![1].method).toBe("POST");
+    expect(compiled.routes![2].routes![1].path).toBe(DEFAULT_PATH);
+    expect(compiled.routes![2].routes![1].handle).toBe(handlerRoute);
   });
 
   test("Test route with two childs with root path, one global middleware and one middleware to the routes", () => {
@@ -133,14 +143,19 @@ describe("Test root path", () => {
     expect(compiled.routes![1].handle).toBe(handlerMiddleware);
 
     expect(compiled.routes![1].routes![0].type).toBe(Elements.Route);
-    expect(compiled.routes![1].routes![0].path).toBe("/app/test");
-    expect(compiled.routes![1].routes![0].method).toBe("GET");
-    expect(compiled.routes![1].routes![0].handle).toBe(handlerRoute);
+    expect(compiled.routes![1].routes![0].path).toBe("/test");
+    expect(compiled.routes![1].routes![0].handle).toBeUndefined();
+    expect(compiled.routes![1].routes![0].method).toBeUndefined();
 
-    expect(compiled.routes![1].routes![1].type).toBe(Elements.Route);
-    expect(compiled.routes![1].routes![1].path).toBe("/app/test");
-    expect(compiled.routes![1].routes![1].method).toBe("POST");
-    expect(compiled.routes![1].routes![1].handle).toBe(handlerRoute);
+    expect(compiled.routes![1].routes![0].routes![0].type).toBe(Elements.Route);
+    expect(compiled.routes![1].routes![0].routes![0].path).toBe(DEFAULT_PATH);
+    expect(compiled.routes![1].routes![0].routes![0].method).toBe("GET");
+    expect(compiled.routes![1].routes![0].routes![0].handle).toBe(handlerRoute);
+
+    expect(compiled.routes![1].routes![0].routes![1].type).toBe(Elements.Route);
+    expect(compiled.routes![1].routes![0].routes![1].path).toBe(DEFAULT_PATH);
+    expect(compiled.routes![1].routes![0].routes![1].method).toBe("POST");
+    expect(compiled.routes![1].routes![0].routes![1].handle).toBe(handlerRoute);
   });
 
   test("Test simple router with root path and error handler", () => {
@@ -158,12 +173,12 @@ describe("Test root path", () => {
     expect(compiled.handle).toBeUndefined();
 
     expect(compiled.routes![0].type).toBe(Elements.Route);
-    expect(compiled.routes![0].path).toBe("/app/test");
+    expect(compiled.routes![0].path).toBe("/test");
     expect(compiled.routes![0].method).toBe("GET");
     expect(compiled.routes![0].handle).toBe(handlerRoute);
 
     expect(compiled.routes![1].type).toBe(Elements.Route);
-    expect(compiled.routes![1].path).toBe("/app/test");
+    expect(compiled.routes![1].path).toBe("/test");
     expect(compiled.routes![1].method).toBe("POST");
     expect(compiled.routes![1].handle).toBe(handlerRoute);
 

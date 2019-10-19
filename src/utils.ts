@@ -1,4 +1,4 @@
-import { RouteNode, Elements } from "./types";
+export const DEFAULT_PATH = Object.freeze("/");
 
 // source https://stackoverflow.com/a/15030117
 export function flatten<T>(arr): T[] {
@@ -16,26 +16,4 @@ export function mergePath(rootPath, childPath) {
 
 function trimSlash(url: string) {
   return url.replace(/\/+/, "/");
-}
-
-export function mapNode(rootProps: any) {
-  const { path } = rootProps;
-  const map = (node): RouteNode => {
-    if (node.type === Elements.Route) {
-      return {
-        ...node,
-        path: path ? mergePath(path, node.path) : node.path
-      };
-    } else if (node.type === Elements.Middleware) {
-      return {
-        ...node,
-        path: node.path ? mergePath(path, node.path) : undefined,
-        routes: node.routes ? node.routes.map(map) : undefined
-      };
-    }
-
-    return node;
-  };
-
-  return map;
 }

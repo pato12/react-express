@@ -1,5 +1,4 @@
-import { Props, RouteNode, Elements } from "@root/types";
-import { mergePath } from "@root/utils";
+import { Props, RouteNode } from "@root/types";
 
 abstract class INode<T = Props> {
   protected childs: INode[];
@@ -29,7 +28,7 @@ abstract class INode<T = Props> {
     throw new Error(`Update is not supported at ${this.type}`);
   }
 
-  abstract render(): RouteNode | RouteNode[];
+  abstract render(): RouteNode;
 }
 
 export default INode;

@@ -1,5 +1,5 @@
 import { RouteNode, Elements } from "@root/types";
-import { flatten, mapNode } from "@root/utils";
+import { DEFAULT_PATH } from "@root/utils";
 
 import INode from "@root/elements/Node";
 import { twiceErrorHandler } from "@root/validation/errorHandler";
@@ -7,8 +7,6 @@ import { twiceErrorHandler } from "@root/validation/errorHandler";
 interface RootInstance {
   path: string;
 }
-
-const DEFAULT_PATH = Object.freeze("/");
 
 class RootInstance extends INode<RootInstance> {
   constructor(type, props) {
@@ -19,23 +17,21 @@ class RootInstance extends INode<RootInstance> {
     };
   }
 
-  render(): RouteNode | RouteNode[] {
-    const nodes = flatten<RouteNode>(this.childs.map(c => c.render()));
-    const sortedNodes = nodes.map(mapNode(this.props)).sort(sortErrorHandler);
+  render(): RouteNode {
+    const nodes = this.childs.map(c => c.render());
+    const sortedNodes = nodes.sort(sortErrorHandler);
 
     twiceErrorHandler(sortedNodes);
 
-    if (this.type === Elements.Express) {
-      return {
-        type: this.type,
-        path: this.props.path,
-        routes: sortedNodes
-      };
-    } else if (this.type === Elements.Root) {
+    if (this.type === Elements.Root) {
       return sortedNodes[0];
     }
 
-    return sortedNodes;
+    return {
+      type: this.type,
+      path: this.props.path,
+      routes: sortedNodes
+    };
   }
 }
 
