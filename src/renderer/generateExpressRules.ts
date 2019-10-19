@@ -71,6 +71,13 @@ export function generateExpressRoutes(
       route.type === Elements.Route &&
       route.handle &&
       route.path &&
+      route.method === "ALL"
+    ) {
+      baseRouter.all(route.path, route.handle);
+    } else if (
+      route.type === Elements.Route &&
+      route.handle &&
+      route.path &&
       route.method === "OPTIONS"
     ) {
       baseRouter.options(route.path, route.handle);
