@@ -1,20 +1,15 @@
 import express from "express";
 
-import { RouteNode, Elements } from "@root/types";
+import { RouteNode, Elements, Methods } from "@root/types";
 
-export function generateExpressRoutes(
+const allMethods = Object.keys(Methods);
+
+function generateExpressRoutes(
   routes: RouteNode[],
-  baseRouter: express.Router = express.Router()
+  baseRouter: express.Router
 ): express.Router {
   for (const route of routes) {
     if (
-      route.type === Elements.Middleware &&
-      route.path &&
-      route.handle &&
-      !route.routes
-    ) {
-      baseRouter.use(route.path, route.handle);
-    } else if (
       route.type === Elements.Middleware &&
       route.path &&
       route.handle &&
@@ -23,9 +18,11 @@ export function generateExpressRoutes(
     ) {
       const nextBaseRouter = express.Router();
 
-      nextBaseRouter.use(route.path, route.handle);
-
-      baseRouter.use(generateExpressRoutes(route.routes, nextBaseRouter));
+      nextBaseRouter.use(route.handle);
+      baseRouter.use(
+        route.path,
+        generateExpressRoutes(route.routes, nextBaseRouter)
+      );
     } else if (
       route.type === Elements.Middleware &&
       route.handle &&
@@ -35,68 +32,70 @@ export function generateExpressRoutes(
       const nextBaseRouter = express.Router();
 
       nextBaseRouter.use(route.handle);
-
       baseRouter.use(generateExpressRoutes(route.routes, nextBaseRouter));
+    } else if (
+      route.type === Elements.Middleware &&
+      route.path &&
+      route.handle &&
+      route.routes &&
+      route.routes.length === 0
+    ) {
+      baseRouter.use(route.path, route.handle);
     } else if (route.type === Elements.Middleware && route.handle) {
       baseRouter.use(route.handle);
     } else if (
       route.type === Elements.Route &&
-      route.handle &&
       route.path &&
-      route.method === "GET"
+      route.routes &&
+      route.routes.length > 0
     ) {
-      baseRouter.get(route.path, route.handle);
+      const nextBaseRouter = express.Router();
+
+      baseRouter.use(
+        route.path,
+        generateExpressRoutes(route.routes, nextBaseRouter)
+      );
+    } else if (
+      route.type === Elements.Route &&
+      route.routes &&
+      route.routes.length > 0
+    ) {
+      const nextBaseRouter = express.Router();
+
+      baseRouter.use(generateExpressRoutes(route.routes, nextBaseRouter));
     } else if (
       route.type === Elements.Route &&
       route.handle &&
       route.path &&
-      route.method === "POST"
+      route.method &&
+      allMethods.includes(route.method)
     ) {
-      baseRouter.post(route.path, route.handle);
-    } else if (
-      route.type === Elements.Route &&
-      route.handle &&
-      route.path &&
-      route.method === "PUT"
-    ) {
-      baseRouter.put(route.path, route.handle);
-    } else if (
-      route.type === Elements.Route &&
-      route.handle &&
-      route.path &&
-      route.method === "DELETE"
-    ) {
-      baseRouter.delete(route.path, route.handle);
-    } else if (
-      route.type === Elements.Route &&
-      route.handle &&
-      route.path &&
-      route.method === "ALL"
-    ) {
-      baseRouter.all(route.path, route.handle);
-    } else if (
-      route.type === Elements.Route &&
-      route.handle &&
-      route.path &&
-      route.method === "OPTIONS"
-    ) {
-      baseRouter.options(route.path, route.handle);
+      baseRouter[route.method](route.path, route.handle);
     }
   }
 
   return baseRouter;
 }
 
-export function generateExpressApp(node: RouteNode): express.Express {
-  const app = express();
+export function generateRoute(
+  node: RouteNode
+): express.Express | express.Router {
   const baseRouter = express.Router();
 
-  if (node.type !== Elements.Express) {
-    throw new Error("The initial node must be Express");
+  if (node.type !== Elements.Express && node.type !== Elements.Root) {
+    throw new Error("The initial node must be Express or Route");
   }
 
-  baseRouter.use(generateExpressRoutes(node.routes!, baseRouter));
-  app.use(baseRouter);
+  const route = generateExpressRoutes(node.routes!, baseRouter);
 
-  return app;
+  baseRouter.use(node.path!, route);
+
+  if (node.type === Elements.Express) {
+    const app = express();
+    app.use(baseRouter);
+
+    return app;
+  }
+
+  return baseRouter;
 }

@@ -15,3 +15,29 @@ export enum Elements {
   Root = "ROOT",
   ErrorHandler = "ERRORHANDLER"
 }
+
+export enum Methods {
+  CHECKOUT = "checkout",
+  COPY = "copy",
+  DELETE = "delete",
+  GET = "get",
+  HEAD = "head",
+  LOCK = "lock",
+  MERGE = "merge",
+  MKACTIVITY = "mkactivity",
+  MKCOL = "mkcol",
+  MOVE = "move",
+  MSEARCH = "m-search",
+  NOTIFY = "notify",
+  OPTIONS = "options",
+  PATCH = "patch",
+  POST = "post",
+  PURGE = "purge",
+  PUT = "put",
+  REPORT = "report",
+  SEARCH = "search",
+  SUBSCRIBE = "subscribe",
+  TRACE = "trace",
+  UNLOCK = "unlock",
+  UNSUBSCRIE = "unsubscribe"
+}
