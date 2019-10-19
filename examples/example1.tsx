@@ -3,15 +3,26 @@ import React from "react";
 import express from "express";
 
 const defaultHandler = (req: express.Request, res: express.Response) => {
+  console.log(`[default] pass: ${req.path}`);
   res.send(`OK: ${req.path}`);
 };
 
-const defaultMiddleware = (
+const handleErrorHandler = (
+  err,
   req: express.Request,
   res: express.Response,
   next
 ) => {
-  console.log(`OK: ${req.path}`);
+  console.log(`[error] pass: ${req.path}`);
+  res.send(`Error handler: ${req.path}`);
+};
+
+const getMiddleware = name => (
+  req: express.Request,
+  res: express.Response,
+  next
+) => {
+  console.log(`[${name}] pass: ${req.path}`);
   next();
 };
 
@@ -19,8 +30,6 @@ const handleTest = defaultHandler;
 const handlePostProduct = defaultHandler;
 const handleGetProducts = defaultHandler;
 const handleGetProduct = defaultHandler;
-const handleMiddleware = defaultMiddleware;
-const handleErrorHandler = defaultHandler;
 
 // const CustomRouter = () => (
 //   <Middleware handle={handleTest}>
@@ -41,32 +50,28 @@ const handleErrorHandler = defaultHandler;
 // );
 
 const routes = Renderer.compile(
-  <Express path="/app">
-    <Middleware handle={handleMiddleware} />
+  <Express>
+    <Middleware handle={getMiddleware("1")} />
 
     <Route method="GET" path="/test" handle={handleTest} />
 
     <Route path="/products">
-      <Middleware path="/:id" handle={handleMiddleware} />
+      <Middleware path="/:id" handle={getMiddleware("2")} />
       <Route path="/:id" method="GET" handle={handleGetProduct} />
       <Route path="/:id" method="POST" handle={handlePostProduct} />
       <Route method="GET" handle={handleGetProducts} />
     </Route>
 
-    <Middleware handle={handleMiddleware}>
-      <Route method="GET" path="/test2" handle={handleTest} />
+    <Middleware path="/test2" handle={getMiddleware("3")}>
+      <Route method="GET" handle={handleTest} />
     </Middleware>
 
-    <React.Fragment>
-      <ErrorHandler handle={handleErrorHandler} />
-    </React.Fragment>
+    <ErrorHandler handle={handleErrorHandler} />
   </Express>
 );
 
-console.log(JSON.stringify(routes, null, 4));
+const app = Renderer.generate(routes) as express.Express;
 
-// const app = Renderer.generate(routes);
-
-// app.listen(3000, function() {
-//   console.log("Example app listening on port 3000!");
-// });
+app.listen(3000, function() {
+  console.log("Example app listening on port 3000!");
+});

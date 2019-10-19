@@ -70,7 +70,9 @@ function generateExpressRoutes(
       route.method &&
       allMethods.includes(route.method)
     ) {
-      baseRouter[route.method](route.path, route.handle);
+      baseRouter[Methods[route.method]](route.path, route.handle);
+    } else if (route.type === Elements.ErrorHandler && route.handle) {
+      baseRouter.use(route.handle);
     }
   }
 
@@ -88,14 +90,12 @@ export function generateRoute(
 
   const route = generateExpressRoutes(node.routes!, baseRouter);
 
-  baseRouter.use(node.path!, route);
-
   if (node.type === Elements.Express) {
     const app = express();
-    app.use(baseRouter);
+    app.use(node.path!, route);
 
     return app;
   }
 
-  return baseRouter;
+  return route;
 }
