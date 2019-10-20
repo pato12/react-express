@@ -3,6 +3,8 @@
   "version": "1.0.4",
   "main": "dist/index.js",
   "license": "MIT",
+  "repository": "git@github.com:pato12/react-express.git",
+  "homepage": "https://github.com/pato12/react-express",
   "scripts": {
     "dev": "ts-node -r tsconfig-paths/register examples/example1",
     "build": "rm -rf dist && ttsc",
