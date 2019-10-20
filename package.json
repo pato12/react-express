@@ -1,7 +1,7 @@
 {
   "name": "react-express-router",
-  "version": "1.0.1",
-  "main": "index.js",
+  "version": "1.0.2",
+  "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
     "dev": "ts-node -r tsconfig-paths/register examples/example1",
