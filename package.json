@@ -1,11 +1,11 @@
 {
   "name": "react-express-router",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
     "dev": "ts-node -r tsconfig-paths/register examples/example1",
-    "build": "rm -rf dist && tsc",
+    "build": "rm -rf dist && ttsc",
     "test": "jest",
     "prepublish": "npm run build"
   },
@@ -29,7 +29,9 @@
     "supertest": "^4.0.2",
     "ts-node": "^8.4.1",
     "tsconfig-paths": "^3.9.0",
-    "typescript": "^3.6.4"
+    "ttypescript": "^1.5.7",
+    "typescript": "^3.6.4",
+    "typescript-transform-paths": "^1.1.11"
   },
   "dependencies": {
     "express": "^4.17.1",
