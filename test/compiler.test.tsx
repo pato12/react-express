@@ -1,6 +1,6 @@
 import React from "react";
 import supertest from "supertest";
-import * as express from "express";
+import express from "express";
 
 import {
   Express,
@@ -10,6 +10,8 @@ import {
   compile,
   ErrorHandler
 } from "@root/index";
+import * as compiler from "@root/renderer/compileExpressRoutes";
+import { Elements } from "@root/types";
 
 describe("Routes", () => {
   test("Simple route", async () => {
@@ -25,7 +27,7 @@ describe("Routes", () => {
     expect(res.text).toBe("ok");
   });
 
-  test("Simple route with child", async () => {
+  test("Simples route with child", async () => {
     const app = compile(
       <Express>
         <Route>
@@ -299,6 +301,39 @@ describe("Test ErrorHandler", () => {
     expect(res.text).toBe("error");
     expect(mockFn).toBeCalledTimes(1);
     expect(mockFn).toBeCalledWith(error);
+  });
+});
+
+describe("Compiler", () => {
+  test("Compile a Express element", () => {
+    const compiled = compiler.compileRoute({
+      type: Elements.Express,
+      routes: [],
+      path: "/"
+    }) as express.Express;
+
+    expect(compiled.listen).not.toBeUndefined();
+    expect(compiled.init).not.toBeUndefined();
+  });
+
+  test("Compile a Route element", () => {
+    const compiled = compiler.compileRoute({
+      type: Elements.Route,
+      routes: [],
+      path: "/"
+    }) as express.Router;
+
+    expect(Object.getPrototypeOf(compiled) == express.Router).toBeTruthy();
+  });
+
+  test("Compile a Fake element", () => {
+    const fakeCompiler = () => compiler.compileRoute({
+      type: 'Fake',
+      routes: [],
+      path: "/"
+    });
+
+    expect(fakeCompiler).toThrowError();
   });
 });
 

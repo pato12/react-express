@@ -4,7 +4,7 @@ import { RouteNode, Elements, Methods } from "@root/types";
 
 const allMethods = [...Object.keys(Methods), ...Object.values(Methods)];
 
-function generateExpressRoutes(
+export function generateExpressRoutes(
   routes: RouteNode[],
   baseRouter: express.Router
 ): express.Router {
@@ -79,7 +79,7 @@ export function compileRoute(
 ): express.Express | express.Router {
   const baseRouter = express.Router();
 
-  if (node.type !== Elements.Express && node.type !== Elements.Root) {
+  if (node.type !== Elements.Express && node.type !== Elements.Route) {
     throw new Error("The initial node must be Express or Route");
   }
 
