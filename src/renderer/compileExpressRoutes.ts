@@ -2,7 +2,7 @@ import express from "express";
 
 import { RouteNode, Elements, Methods } from "@root/types";
 
-const allMethods = Object.keys(Methods);
+const allMethods = [...Object.keys(Methods), ...Object.values(Methods)];
 
 function generateExpressRoutes(
   routes: RouteNode[],
@@ -70,7 +70,10 @@ function generateExpressRoutes(
       route.method &&
       allMethods.includes(route.method)
     ) {
-      baseRouter[Methods[route.method]](route.path, route.handle);
+      baseRouter[Methods[route.method] || route.method](
+        route.path,
+        route.handle
+      );
     } else if (route.type === Elements.ErrorHandler && route.handle) {
       baseRouter.use(route.handle);
     }

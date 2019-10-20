@@ -1,4 +1,10 @@
-import { Renderer, Express, Middleware, Route, ErrorHandler } from "../src";
+import {
+  Express,
+  Middleware,
+  Route,
+  ErrorHandler,
+  compile
+} from "../src";
 import React from "react";
 import express from "express";
 
@@ -49,7 +55,7 @@ const handleGetProduct = defaultHandler;
 //   </Middleware>
 // );
 
-const routes = Renderer.generate(
+const app = compile(
   <Express>
     <Middleware handle={getMiddleware("1")} />
 
@@ -68,9 +74,7 @@ const routes = Renderer.generate(
 
     <ErrorHandler handle={handleErrorHandler} />
   </Express>
-);
-
-const app = Renderer.compile(routes) as express.Express;
+) as express.Express;
 
 app.listen(3000, function() {
   console.log("Example app listening on port 3000!");

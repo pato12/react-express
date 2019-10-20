@@ -7,4 +7,8 @@ const Root = Elements.Root as any;
 const Route = Elements.Route as any;
 const ErrorHandler = Elements.ErrorHandler as any;
 
-export { Renderer, Express, Middleware, Root, Route, ErrorHandler, Methods };
+function compile(element) {
+  return Renderer.compile(Renderer.generate(element));
+}
+
+export { Renderer, Express, Middleware, Root, Route, ErrorHandler, Methods, compile };
