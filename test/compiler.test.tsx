@@ -2,13 +2,37 @@ import React from "react";
 import supertest from "supertest";
 import * as express from "express";
 
-import { Express, Middleware, Route, Methods, compile } from "@root/index";
+import {
+  Express,
+  Middleware,
+  Route,
+  Methods,
+  compile,
+  ErrorHandler
+} from "@root/index";
 
 describe("Routes", () => {
   test("Simple route", async () => {
     const app = compile(
       <Express>
         <Route method={Methods.GET} path="/test" handle={defaultHandler} />
+      </Express>
+    );
+
+    const res = await supertest(app as express.Express).get("/test");
+
+    expect(res.status).toBe(200);
+    expect(res.text).toBe("ok");
+  });
+
+  test("Simple route with child", async () => {
+    const app = compile(
+      <Express>
+        <Route>
+          <Route>
+            <Route method={Methods.GET} path="/test" handle={defaultHandler} />
+          </Route>
+        </Route>
       </Express>
     );
 
@@ -110,6 +134,23 @@ describe("Middlewares", () => {
     const app = compile(
       <Express>
         <Middleware handle={defaultMiddlewareHandler} />
+        <Route method={Methods.GET} path="/test" handle={defaultHandler} />
+      </Express>
+    );
+
+    expect(mockFn).toBeCalledTimes(0);
+
+    const res = await supertest(app as express.Express).get("/test");
+
+    expect(res.status).toBe(200);
+    expect(res.text).toBe("ok");
+    expect(mockFn).toBeCalledTimes(1);
+  });
+
+  test("Simple middleware with path", async () => {
+    const app = compile(
+      <Express>
+        <Middleware path="/test" handle={defaultMiddlewareHandler} />
         <Route method={Methods.GET} path="/test" handle={defaultHandler} />
       </Express>
     );
@@ -232,6 +273,33 @@ describe("Test all method", () => {
       expect(res.status).toBe(200);
     });
   }
+});
+
+describe("Test ErrorHandler", () => {
+  test("Simple ErrorHandler", async () => {
+    const mockFn = jest.fn();
+
+    const error = new Error("fake error");
+    const handlerThrowError = (req, res, next) => next(error);
+    const errorHandler = (err, req, res, next) => {
+      mockFn(err);
+      res.status(500).send("error");
+    };
+
+    const app = compile(
+      <Express>
+        <Route method={Methods.GET} path="/test" handle={handlerThrowError} />
+        <ErrorHandler handle={errorHandler} />
+      </Express>
+    );
+
+    const res = await supertest(app as express.Express).get("/test");
+
+    expect(res.status).toBe(500);
+    expect(res.text).toBe("error");
+    expect(mockFn).toBeCalledTimes(1);
+    expect(mockFn).toBeCalledWith(error);
+  });
 });
 
 const defaultHandler = (req, res: express.Response) =>

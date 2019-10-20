@@ -57,14 +57,6 @@ function generateExpressRoutes(
       );
     } else if (
       route.type === Elements.Route &&
-      route.routes &&
-      route.routes.length > 0
-    ) {
-      const nextBaseRouter = express.Router();
-
-      baseRouter.use(generateExpressRoutes(route.routes, nextBaseRouter));
-    } else if (
-      route.type === Elements.Route &&
       route.handle &&
       route.path &&
       route.method &&
