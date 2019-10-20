@@ -8,8 +8,10 @@
   "scripts": {
     "dev": "ts-node -r tsconfig-paths/register examples/example1",
     "build": "rm -rf dist && ttsc",
-    "test": "jest",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "test": "npm run test:ci && npm run test:lint",
+    "test:ci": "jest",
+    "test:lint": "tslint 'src/**/*.{ts,tsx}'"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.4",
