@@ -9,7 +9,7 @@
     "dev": "ts-node -r tsconfig-paths/register examples/example1",
     "build": "rm -rf dist && ttsc",
     "test": "jest",
-    "prepublish": "npm run build"
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.4",
