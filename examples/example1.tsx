@@ -70,7 +70,7 @@ const routes = Renderer.generate(
   </Express>
 );
 
-const app = Renderer.generate(routes) as express.Express;
+const app = Renderer.compile(routes) as express.Express;
 
 app.listen(3000, function() {
   console.log("Example app listening on port 3000!");
