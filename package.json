@@ -1,12 +1,13 @@
 {
   "name": "react-express-router",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
     "dev": "ts-node -r tsconfig-paths/register examples/example1",
-    "build": "rm -rf dist && babel examples --out-dir dist --extensions .ts,.tsx,.js",
-    "test": "jest"
+    "build": "rm -rf dist && babel src --out-dir dist --extensions .ts,.tsx,.js",
+    "test": "jest",
+    "prepublish": "npm run build"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.4",
@@ -24,6 +25,7 @@
     "@types/react-reconciler": "^0.18.0",
     "@types/supertest": "^2.0.8",
     "jest": "^24.9.0",
+    "np": "^5.1.1",
     "supertest": "^4.0.2",
     "ts-node": "^8.4.1",
     "tsconfig-paths": "^3.9.0",
@@ -33,5 +35,8 @@
     "express": "^4.17.1",
     "react": "^16.10.2",
     "react-reconciler": "^0.22.2"
-  }
+  },
+  "files": [
+    "dist"
+  ]
 }
