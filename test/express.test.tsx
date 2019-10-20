@@ -16,7 +16,7 @@ const handlerError = Object.freeze(() => {});
 
 describe("Test root path", () => {
   test("Test simple router with root path", () => {
-    const compiled = Renderer.compile(
+    const compiled = Renderer.generate(
       <Express path="/app">
         <Route method="GET" path="/test" handle={handlerRoute} />
         <Route method="POST" path="/test" handle={handlerRoute} />
@@ -40,7 +40,7 @@ describe("Test root path", () => {
   });
 
   test("Test route with two childs with root path", () => {
-    const compiled = Renderer.compile(
+    const compiled = Renderer.generate(
       <Express path="/app">
         <Route path="/test">
           <Route method="GET" handle={handlerRoute} />
@@ -70,7 +70,7 @@ describe("Test root path", () => {
   });
 
   test("Test route with two childs with root path and two global middleware", () => {
-    const compiled = Renderer.compile(
+    const compiled = Renderer.generate(
       <Express path="/app">
         <Middleware handle={handlerMiddleware} />
         <Middleware handle={handlerMiddleware} />
@@ -114,7 +114,7 @@ describe("Test root path", () => {
   });
 
   test("Test route with two childs with root path, one global middleware and one middleware to the routes", () => {
-    const compiled = Renderer.compile(
+    const compiled = Renderer.generate(
       <Express path="/app">
         <Middleware handle={handlerMiddleware} />
 
@@ -159,7 +159,7 @@ describe("Test root path", () => {
   });
 
   test("Test simple router with root path and error handler", () => {
-    const compiled = Renderer.compile(
+    const compiled = Renderer.generate(
       <Express path="/app">
         <Route method="GET" path="/test" handle={handlerRoute} />
         <Route method="POST" path="/test" handle={handlerRoute} />

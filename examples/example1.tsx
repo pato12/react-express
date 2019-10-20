@@ -49,7 +49,7 @@ const handleGetProduct = defaultHandler;
 //   </Middleware>
 // );
 
-const routes = Renderer.compile(
+const routes = Renderer.generate(
   <Express>
     <Middleware handle={getMiddleware("1")} />
 

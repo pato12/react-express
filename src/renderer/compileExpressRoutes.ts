@@ -79,7 +79,7 @@ function generateExpressRoutes(
   return baseRouter;
 }
 
-export function generateRoute(
+export function compileRoute(
   node: RouteNode
 ): express.Express | express.Router {
   const baseRouter = express.Router();

@@ -2,7 +2,7 @@ import Reconciler from "react-reconciler";
 import { Props, Elements, RouteNode } from "@root/types";
 import { createInstance } from "@root/elements";
 
-import { generateRoute } from "./generateExpressRules";
+import { compileRoute } from "./compileExpressRoutes";
 
 const HostConfig = {
   now: Date.now,
@@ -79,7 +79,7 @@ const HostConfig = {
 const reconcilerInstance = Reconciler(HostConfig);
 
 const CustomRenderer = {
-  compile(element) {
+  generate(element) {
     const rootContainer = createInstance(Elements.Root);
     const mountNode = reconcilerInstance.createContainer(rootContainer);
 
@@ -87,8 +87,8 @@ const CustomRenderer = {
 
     return rootContainer.render() as RouteNode;
   },
-  generate(compiled: RouteNode) {
-    return generateRoute(compiled);
+  compile(generated: RouteNode) {
+    return compileRoute(generated);
   }
 };
 

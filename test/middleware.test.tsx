@@ -9,7 +9,7 @@ const handlerRoute = Object.freeze(() => {});
 
 describe("Test middlewares", () => {
   test("Test route with two childs and two global middleware", () => {
-    const compiled = Renderer.compile(
+    const compiled = Renderer.generate(
       <Express>
         <Middleware handle={handlerMiddleware} />
         <Middleware handle={handlerMiddleware} />
@@ -48,7 +48,7 @@ describe("Test middlewares", () => {
   });
 
   test("Test route with two childs, one global middleware and one middleware to the routes", () => {
-    const compiled = Renderer.compile(
+    const compiled = Renderer.generate(
       <Express>
         <Middleware handle={handlerMiddleware} />
 
@@ -88,7 +88,7 @@ describe("Test middlewares", () => {
   });
 
   test("Test route with two childs and one middleware to the routes", () => {
-    const compiled = Renderer.compile(
+    const compiled = Renderer.generate(
       <Express>
         <Middleware path="/test1" handle={handlerMiddleware}>
           <Route path="/test2">
@@ -120,7 +120,7 @@ describe("Test middlewares", () => {
   });
 
   test("Test route with two childs and one middleware to the routes", () => {
-    const compiled = Renderer.compile(
+    const compiled = Renderer.generate(
       <Express>
         <Route path="/test2">
           <Middleware path="/test1" handle={handlerMiddleware}>
@@ -153,7 +153,7 @@ describe("Test middlewares", () => {
   });
 
   test("Test nested middleware", () => {
-    const compiled = Renderer.compile(
+    const compiled = Renderer.generate(
       <Express>
         <Route path="/test2">
           <Middleware path="/test1" handle={handlerMiddleware}>

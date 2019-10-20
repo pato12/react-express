@@ -8,7 +8,7 @@ const handlerRoute = Object.freeze(() => {});
 
 describe("Test routes", () => {
   test("Test simple router", () => {
-    const compiled = Renderer.compile(
+    const compiled = Renderer.generate(
       <Express>
         <Route method="GET" path="/test" handle={handlerRoute} />
         <Route method="POST" path="/test" handle={handlerRoute} />
@@ -27,7 +27,7 @@ describe("Test routes", () => {
   });
 
   test("Test route with two childs", () => {
-    const compiled = Renderer.compile(
+    const compiled = Renderer.generate(
       <Express>
         <Route path="/test">
           <Route method="GET" handle={handlerRoute} />
@@ -53,7 +53,7 @@ describe("Test routes", () => {
   });
 
   test("Test nested routes", () => {
-    const compiled = Renderer.compile(
+    const compiled = Renderer.generate(
       <Express>
         <Route path="/test">
           <Route method="GET" handle={handlerRoute} />
@@ -176,7 +176,7 @@ describe("Extra test routes", () => {
         <Route method="POST" handle={handlerRoute} />
       </Route>
     );
-    const compiled = Renderer.compile(
+    const compiled = Renderer.generate(
       <Express>
         <Route method="GET" path="/test" handle={handlerRoute} />
         <Route method="POST" path="/test" handle={handlerRoute} />
@@ -210,7 +210,7 @@ describe("Extra test routes", () => {
     expect(compiled.routes![2].routes![1].handle).toBe(handlerRoute);
   });
   test("Using react fragment", () => {
-    const compiled = Renderer.compile(
+    const compiled = Renderer.generate(
       <Express>
         <Route method="GET" path="/test" handle={handlerRoute} />
         <Route method="POST" path="/test" handle={handlerRoute} />

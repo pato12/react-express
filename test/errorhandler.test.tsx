@@ -15,7 +15,7 @@ const handlerError = Object.freeze(() => {});
 
 describe("Error Handler", () => {
   test("Test routes and errorhandler at bottom", () => {
-    const compiled = Renderer.compile(
+    const compiled = Renderer.generate(
       <Express>
         <Route method="GET" path="/test" handle={handlerRoute} />
         <Route method="POST" path="/test" handle={handlerRoute} />
@@ -45,7 +45,7 @@ describe("Error Handler", () => {
   });
 
   test("Test routes and errorhandler at top", () => {
-    const compiled = Renderer.compile(
+    const compiled = Renderer.generate(
       <Express>
         <ErrorHandler handle={handlerError} />
         <Route method="GET" path="/test" handle={handlerRoute} />
@@ -76,7 +76,7 @@ describe("Error Handler", () => {
 
   test("Test routes and twice errorhandler", () => {
     const compile = () =>
-      Renderer.compile(
+      Renderer.generate(
         <Express>
           <ErrorHandler handle={handlerError} />
           <ErrorHandler handle={handlerError} />
@@ -90,7 +90,7 @@ describe("Error Handler", () => {
 
   test("Test error handler inside route", () => {
     const compile = () =>
-      Renderer.compile(
+      Renderer.generate(
         <Express>
           <Route path="/test">
             <Route method="GET" handle={handlerRoute} />
@@ -105,7 +105,7 @@ describe("Error Handler", () => {
 
   test("Test error handler inside middleware", () => {
     const compile = () =>
-      Renderer.compile(
+      Renderer.generate(
         <Express>
           <Middleware path="/test" handle={handlerMiddleware}>
             <Route method="GET" handle={handlerRoute} />
