@@ -1,9 +1,9 @@
-import { Props, Elements } from "@root/types";
+import { Elements, Props } from '@root/types';
 
-import RootInstance from "./Root";
-import MiddlewareInstance from "./Middleware";
-import RouteInstance from "./Route";
-import ErrorHandlerInstance from "./ErrorHandler";
+import ErrorHandlerInstance from './ErrorHandler';
+import MiddlewareInstance from './Middleware';
+import RootInstance from './Root';
+import RouteInstance from './Route';
 
 export function createInstance(type: string, props?: Props) {
   if (type === Elements.Express) {

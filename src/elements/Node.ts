@@ -1,4 +1,4 @@
-import { Props, RouteNode } from "@root/types";
+import { Props, RouteNode } from '@root/types';
 
 abstract class INode<T = Props> {
   protected childs: INode[];

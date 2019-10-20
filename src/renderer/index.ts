@@ -1,24 +1,24 @@
-import Reconciler from "react-reconciler";
-import { Props, Elements, RouteNode } from "@root/types";
-import { createInstance } from "@root/elements";
+import { createInstance } from '@root/elements';
+import { Elements, Props, RouteNode } from '@root/types';
+import Reconciler from 'react-reconciler';
 
-import { compileRoute } from "./compileExpressRoutes";
+import { compileRoute } from './compileExpressRoutes';
 
 const HostConfig = {
   now: Date.now,
   getRootHostContext() {
-    let rootContext = {};
+    const rootContext = {};
     return rootContext;
   },
   getChildHostContext(parentContext: any, fiberType: any, rootInstance: any) {
-    let context = { type: fiberType };
+    const context = { type: fiberType };
     return context;
   },
   shouldSetTextContent() {
     return false;
   },
   createTextInstance() {
-    throw new Error("createTextInstance not supported");
+    throw new Error('createTextInstance not supported');
   },
   createInstance(
     type: string,
@@ -35,8 +35,12 @@ const HostConfig = {
   finalizeInitialChildren: () => {
     return false;
   },
-  prepareForCommit() {},
-  resetAfterCommit() {},
+  prepareForCommit() {
+    // pass
+  },
+  resetAfterCommit() {
+    // pass
+  },
   appendChildToContainer: (parent, child) => {
     parent.appendChild(child);
   },
@@ -55,7 +59,7 @@ const HostConfig = {
     instance.update(oldProps, newProps);
   },
   commitTextUpdate(textInstance, oldText, newText) {
-    throw new Error("commitTextUpdate not supported");
+    throw new Error('commitTextUpdate not supported');
   },
   appendChild(parentInstance: any, child) {
     parentInstance.appendChild(child);
@@ -72,7 +76,9 @@ const HostConfig = {
   removeChildFromContainer(container: any, child) {
     container.removeChild(child);
   },
-  resetTextContent() {}
+  resetTextContent() {
+    // pass
+  },
 };
 
 // @ts-ignore
@@ -89,7 +95,7 @@ const CustomRenderer = {
   },
   compile(generated: RouteNode) {
     return compileRoute(generated);
-  }
+  },
 };
 
 export default CustomRenderer;

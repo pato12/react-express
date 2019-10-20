@@ -1,33 +1,33 @@
-import React from "react";
-import supertest from "supertest";
-import express from "express";
+import express from 'express';
+import React from 'react';
+import supertest from 'supertest';
 
 import {
+  compile,
+  ErrorHandler,
   Express,
+  Methods,
   Middleware,
   Route,
-  Methods,
-  compile,
-  ErrorHandler
-} from "@root/index";
-import * as compiler from "@root/renderer/compileExpressRoutes";
-import { Elements } from "@root/types";
+} from '@root/index';
+import * as compiler from '@root/renderer/compileExpressRoutes';
+import { Elements } from '@root/types';
 
-describe("Routes", () => {
-  test("Simple route", async () => {
+describe('Routes', () => {
+  test('Simple route', async () => {
     const app = compile(
       <Express>
         <Route method={Methods.GET} path="/test" handle={defaultHandler} />
       </Express>
     );
 
-    const res = await supertest(app as express.Express).get("/test");
+    const res = await supertest(app as express.Express).get('/test');
 
     expect(res.status).toBe(200);
-    expect(res.text).toBe("ok");
+    expect(res.text).toBe('ok');
   });
 
-  test("Simples route with child", async () => {
+  test('Simples route with child', async () => {
     const app = compile(
       <Express>
         <Route>
@@ -38,13 +38,13 @@ describe("Routes", () => {
       </Express>
     );
 
-    const res = await supertest(app as express.Express).get("/test");
+    const res = await supertest(app as express.Express).get('/test');
 
     expect(res.status).toBe(200);
-    expect(res.text).toBe("ok");
+    expect(res.text).toBe('ok');
   });
 
-  test("Catch 404", async () => {
+  test('Catch 404', async () => {
     const app = compile(
       <Express>
         <Route method={Methods.GET} path="/test" handle={defaultHandler} />
@@ -52,13 +52,13 @@ describe("Routes", () => {
       </Express>
     );
 
-    const res = await supertest(app as express.Express).get("/pagenotfound");
+    const res = await supertest(app as express.Express).get('/pagenotfound');
 
     expect(res.status).toBe(404);
-    expect(res.text).toBe("404");
+    expect(res.text).toBe('404');
   });
 
-  test("Nested routes", async () => {
+  test('Nested routes', async () => {
     const app = compile(
       <Express>
         <Route method={Methods.GET} path="/test" handle={defaultHandler} />
@@ -72,23 +72,23 @@ describe("Routes", () => {
       </Express>
     );
 
-    let res = await supertest(app as express.Express).get("/test");
+    let res = await supertest(app as express.Express).get('/test');
 
     expect(res.status).toBe(200);
-    expect(res.text).toBe("ok");
+    expect(res.text).toBe('ok');
 
-    res = await supertest(app as express.Express).get("/test2/test3");
-
-    expect(res.status).toBe(200);
-    expect(res.text).toBe("ok");
-
-    res = await supertest(app as express.Express).get("/test2/test4/test5");
+    res = await supertest(app as express.Express).get('/test2/test3');
 
     expect(res.status).toBe(200);
-    expect(res.text).toBe("ok");
+    expect(res.text).toBe('ok');
+
+    res = await supertest(app as express.Express).get('/test2/test4/test5');
+
+    expect(res.status).toBe(200);
+    expect(res.text).toBe('ok');
   });
 
-  test("Nested routes with root path", async () => {
+  test('Nested routes with root path', async () => {
     const app = compile(
       <Express path="/app">
         <Route method={Methods.GET} path="/test" handle={defaultHandler} />
@@ -102,37 +102,37 @@ describe("Routes", () => {
       </Express>
     );
 
-    let res = await supertest(app as express.Express).get("/app/test");
+    let res = await supertest(app as express.Express).get('/app/test');
 
     expect(res.status).toBe(200);
-    expect(res.text).toBe("ok");
+    expect(res.text).toBe('ok');
 
-    res = await supertest(app as express.Express).get("/app/test2/test3");
-
-    expect(res.status).toBe(200);
-    expect(res.text).toBe("ok");
-
-    res = await supertest(app as express.Express).get("/app/test2/test4/test5");
+    res = await supertest(app as express.Express).get('/app/test2/test3');
 
     expect(res.status).toBe(200);
-    expect(res.text).toBe("ok");
+    expect(res.text).toBe('ok');
+
+    res = await supertest(app as express.Express).get('/app/test2/test4/test5');
+
+    expect(res.status).toBe(200);
+    expect(res.text).toBe('ok');
   });
 });
 
-describe("Middlewares", () => {
+describe('Middlewares', () => {
   let defaultMiddlewareHandler;
   let mockFn;
 
   beforeAll(() => {
     ({
       mockFn,
-      handler: defaultMiddlewareHandler
-    } = generateMiddlewareHandlerWithMock("default"));
+      handler: defaultMiddlewareHandler,
+    } = generateMiddlewareHandlerWithMock('default'));
   });
 
   beforeEach(() => mockFn.mockReset());
 
-  test("Simple middleware", async () => {
+  test('Simple middleware', async () => {
     const app = compile(
       <Express>
         <Middleware handle={defaultMiddlewareHandler} />
@@ -142,14 +142,14 @@ describe("Middlewares", () => {
 
     expect(mockFn).toBeCalledTimes(0);
 
-    const res = await supertest(app as express.Express).get("/test");
+    const res = await supertest(app as express.Express).get('/test');
 
     expect(res.status).toBe(200);
-    expect(res.text).toBe("ok");
+    expect(res.text).toBe('ok');
     expect(mockFn).toBeCalledTimes(1);
   });
 
-  test("Simple middleware with path", async () => {
+  test('Simple middleware with path', async () => {
     const app = compile(
       <Express>
         <Middleware path="/test" handle={defaultMiddlewareHandler} />
@@ -159,14 +159,14 @@ describe("Middlewares", () => {
 
     expect(mockFn).toBeCalledTimes(0);
 
-    const res = await supertest(app as express.Express).get("/test");
+    const res = await supertest(app as express.Express).get('/test');
 
     expect(res.status).toBe(200);
-    expect(res.text).toBe("ok");
+    expect(res.text).toBe('ok');
     expect(mockFn).toBeCalledTimes(1);
   });
 
-  test("Simple middleware with child", async () => {
+  test('Simple middleware with child', async () => {
     const app = compile(
       <Express>
         <Middleware handle={defaultMiddlewareHandler}>
@@ -177,14 +177,14 @@ describe("Middlewares", () => {
 
     expect(mockFn).toBeCalledTimes(0);
 
-    const res = await supertest(app as express.Express).get("/test");
+    const res = await supertest(app as express.Express).get('/test');
 
     expect(res.status).toBe(200);
-    expect(res.text).toBe("ok");
+    expect(res.text).toBe('ok');
     expect(mockFn).toBeCalledTimes(1);
   });
 
-  test("Simple middleware with childs and path", async () => {
+  test('Simple middleware with childs and path', async () => {
     const app = compile(
       <Express>
         <Middleware path="/test1" handle={defaultMiddlewareHandler}>
@@ -196,28 +196,28 @@ describe("Middlewares", () => {
 
     expect(mockFn).toBeCalledTimes(0);
 
-    let res = await supertest(app as express.Express).get("/test1/test2");
+    let res = await supertest(app as express.Express).get('/test1/test2');
 
     expect(res.status).toBe(200);
-    expect(res.text).toBe("ok");
+    expect(res.text).toBe('ok');
     expect(mockFn).toBeCalledTimes(1);
 
-    res = await supertest(app as express.Express).get("/test1/test3");
+    res = await supertest(app as express.Express).get('/test1/test3');
 
     expect(res.status).toBe(200);
-    expect(res.text).toBe("ok");
+    expect(res.text).toBe('ok');
     expect(mockFn).toBeCalledTimes(2);
   });
 
-  test("Nested middleware with child", async () => {
+  test('Nested middleware with child', async () => {
     const {
       mockFn: mockFn1,
-      handler: handler1
-    } = generateMiddlewareHandlerWithMock("m1");
+      handler: handler1,
+    } = generateMiddlewareHandlerWithMock('m1');
     const {
       mockFn: mockFn2,
-      handler: handler2
-    } = generateMiddlewareHandlerWithMock("m2");
+      handler: handler2,
+    } = generateMiddlewareHandlerWithMock('m2');
 
     const app = compile(
       <Express>
@@ -234,16 +234,16 @@ describe("Middlewares", () => {
     expect(mockFn1).toBeCalledTimes(0);
     expect(mockFn2).toBeCalledTimes(0);
 
-    const res = await supertest(app as express.Express).get("/test");
+    const res = await supertest(app as express.Express).get('/test');
 
     expect(res.status).toBe(200);
-    expect(res.text).toBe("ok");
+    expect(res.text).toBe('ok');
     expect(mockFn1).toBeCalledTimes(1);
     expect(mockFn2).toBeCalledTimes(1);
     expect(mockFn).toBeCalledTimes(0);
   });
 
-  test("Middleware to handle 404", async () => {
+  test('Middleware to handle 404', async () => {
     const app = compile(
       <Express>
         <Route method={Methods.GET} path="/test" handle={defaultHandler} />
@@ -251,14 +251,14 @@ describe("Middlewares", () => {
       </Express>
     );
 
-    const res = await supertest(app as express.Express).get("/page404notfound");
+    const res = await supertest(app as express.Express).get('/page404notfound');
 
     expect(res.status).toBe(404);
-    expect(res.text).toBe("404");
+    expect(res.text).toBe('404');
   });
 });
 
-describe("Test all method", () => {
+describe('Test all method', () => {
   const methods = Object.values(Methods);
 
   for (const method of methods) {
@@ -270,22 +270,22 @@ describe("Test all method", () => {
         </Express>
       );
 
-      const res = await supertest(app as express.Express)[method]("/test");
+      const res = await supertest(app as express.Express)[method]('/test');
 
       expect(res.status).toBe(200);
     });
   }
 });
 
-describe("Test ErrorHandler", () => {
-  test("Simple ErrorHandler", async () => {
+describe('Test ErrorHandler', () => {
+  test('Simple ErrorHandler', async () => {
     const mockFn = jest.fn();
 
-    const error = new Error("fake error");
+    const error = new Error('fake error');
     const handlerThrowError = (req, res, next) => next(error);
     const errorHandler = (err, req, res, next) => {
       mockFn(err);
-      res.status(500).send("error");
+      res.status(500).send('error');
     };
 
     const app = compile(
@@ -295,52 +295,53 @@ describe("Test ErrorHandler", () => {
       </Express>
     );
 
-    const res = await supertest(app as express.Express).get("/test");
+    const res = await supertest(app as express.Express).get('/test');
 
     expect(res.status).toBe(500);
-    expect(res.text).toBe("error");
+    expect(res.text).toBe('error');
     expect(mockFn).toBeCalledTimes(1);
     expect(mockFn).toBeCalledWith(error);
   });
 });
 
-describe("Compiler", () => {
-  test("Compile a Express element", () => {
+describe('Compiler', () => {
+  test('Compile a Express element', () => {
     const compiled = compiler.compileRoute({
       type: Elements.Express,
       routes: [],
-      path: "/"
+      path: '/',
     }) as express.Express;
 
     expect(compiled.listen).not.toBeUndefined();
     expect(compiled.init).not.toBeUndefined();
   });
 
-  test("Compile a Route element", () => {
+  test('Compile a Route element', () => {
     const compiled = compiler.compileRoute({
       type: Elements.Route,
       routes: [],
-      path: "/"
+      path: '/',
     }) as express.Router;
 
     expect(Object.getPrototypeOf(compiled) == express.Router).toBeTruthy();
   });
 
-  test("Compile a Fake element", () => {
-    const fakeCompiler = () => compiler.compileRoute({
-      type: 'Fake',
-      routes: [],
-      path: "/"
-    });
+  test('Compile a Fake element', () => {
+    const fakeCompiler = () =>
+      compiler.compileRoute({
+        type: 'Fake',
+        routes: [],
+        path: '/',
+      });
 
     expect(fakeCompiler).toThrowError();
   });
 });
 
 const defaultHandler = (req, res: express.Response) =>
-  res.status(200).send("ok");
+  res.status(200).send('ok');
 const handlerOf404 = (req, res: express.Response) =>
-  res.status(404).send("404");
+  res.status(404).send('404');
 
 const generateMiddlewareHandlerWithMock = name => {
   const mockFn = jest.fn().mockName(name);

@@ -1,15 +1,15 @@
-import { RouteNode } from "@root/types";
+import { RouteNode } from '@root/types';
 
-import INode from "@root/elements/Node";
-import { noErrorHandler } from "@root/validation/errorHandler";
-import { DEFAULT_PATH } from "@root/utils";
+import INode from '@root/elements/Node';
+import { DEFAULT_PATH } from '@root/utils';
+import { noErrorHandler } from '@root/validation/errorHandler';
 
 class RouteInstance extends INode<RouteNode> {
   constructor(type, props) {
     super(type, props);
     this.props = {
       ...props,
-      path: props && props.path ? props && props.path : DEFAULT_PATH
+      path: props && props.path ? props && props.path : DEFAULT_PATH,
     };
   }
 
@@ -24,7 +24,7 @@ class RouteInstance extends INode<RouteNode> {
       path,
       handle,
       method,
-      routes
+      routes,
     };
   }
 }

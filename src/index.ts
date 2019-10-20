@@ -1,5 +1,5 @@
-import Renderer from "@root/renderer";
-import { Elements, Methods } from "@root/types";
+import Renderer from '@root/renderer';
+import { Elements, Methods } from '@root/types';
 
 const Express = Elements.Express as any;
 const Middleware = Elements.Middleware as any;
@@ -11,4 +11,13 @@ function compile(element) {
   return Renderer.compile(Renderer.generate(element));
 }
 
-export { Renderer, Express, Middleware, Root, Route, ErrorHandler, Methods, compile };
+export {
+  Renderer,
+  Express,
+  Middleware,
+  Root,
+  Route,
+  ErrorHandler,
+  Methods,
+  compile,
+};

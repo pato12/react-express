@@ -1,8 +1,8 @@
-import { RouteNode, Elements } from "@root/types";
-import { DEFAULT_PATH } from "@root/utils";
+import { Elements, RouteNode } from '@root/types';
+import { DEFAULT_PATH } from '@root/utils';
 
-import INode from "@root/elements/Node";
-import { twiceErrorHandler } from "@root/validation/errorHandler";
+import INode from '@root/elements/Node';
+import { twiceErrorHandler } from '@root/validation/errorHandler';
 
 interface RootInstance {
   path: string;
@@ -13,7 +13,7 @@ class RootInstance extends INode<RootInstance> {
     super(type, props);
     this.props = {
       ...props,
-      path: props && props.path ? props && props.path : DEFAULT_PATH
+      path: props && props.path ? props && props.path : DEFAULT_PATH,
     };
   }
 
@@ -30,7 +30,7 @@ class RootInstance extends INode<RootInstance> {
     return {
       type: this.type,
       path: this.props.path,
-      routes: sortedNodes
+      routes: sortedNodes,
     };
   }
 }

@@ -1,6 +1,6 @@
-import { RouteNode } from "@root/types";
+import { RouteNode } from '@root/types';
 
-import INode from "@root/elements/Node";
+import INode from '@root/elements/Node';
 
 class ErrorHandler extends INode<RouteNode> {
   render(): RouteNode {
@@ -8,7 +8,7 @@ class ErrorHandler extends INode<RouteNode> {
 
     return {
       type: this.type,
-      handle
+      handle,
     };
   }
 }

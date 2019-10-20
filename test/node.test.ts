@@ -1,6 +1,6 @@
-import INode from "@root/elements/Node";
-import { RouteNode, Elements } from "@root/types";
-import { createInstance } from "@root/elements";
+import { createInstance } from '@root/elements';
+import INode from '@root/elements/Node';
+import { Elements, RouteNode } from '@root/types';
 
 class FakeNode extends INode<RouteNode> {
   render(): RouteNode {
@@ -10,14 +10,14 @@ class FakeNode extends INode<RouteNode> {
     return this.childs;
   }
 }
-const getFakeInstance = () => new FakeNode("fake", {});
+const getFakeInstance = () => new FakeNode('fake', {});
 
-describe("Test INode", () => {
+describe('Test INode', () => {
   let instance: FakeNode;
 
   beforeEach(() => (instance = getFakeInstance()));
 
-  test("append child", () => {
+  test('append child', () => {
     expect(instance.getChilds()).toHaveLength(0);
 
     instance.appendChild(getFakeInstance());
@@ -25,7 +25,7 @@ describe("Test INode", () => {
     expect(instance.getChilds()).toHaveLength(1);
   });
 
-  test("append and remove child", () => {
+  test('append and remove child', () => {
     expect(instance.getChilds()).toHaveLength(0);
 
     const child = getFakeInstance();
@@ -37,7 +37,7 @@ describe("Test INode", () => {
     expect(instance.getChilds()).toHaveLength(0);
   });
 
-  test("append and remove fake child", () => {
+  test('append and remove fake child', () => {
     expect(instance.getChilds()).toHaveLength(0);
 
     const child = getFakeInstance();
@@ -49,7 +49,7 @@ describe("Test INode", () => {
     expect(instance.getChilds()).toHaveLength(1);
   });
 
-  test("insterBefore child", () => {
+  test('insterBefore child', () => {
     expect(instance.getChilds()).toHaveLength(0);
 
     const child = getFakeInstance();
@@ -65,7 +65,7 @@ describe("Test INode", () => {
     expect(instance.getChilds()[1]).toBe(child);
   });
 
-  test("insterBefore fake child", () => {
+  test('insterBefore fake child', () => {
     expect(instance.getChilds()).toHaveLength(0);
 
     const child = getFakeInstance();
@@ -80,19 +80,19 @@ describe("Test INode", () => {
     expect(instance.getChilds()[0]).toBe(child);
   });
 
-  test("update props", () => {
+  test('update props', () => {
     expect(() => instance.update({}, {})).toThrowError();
   });
 });
 
-describe("Test createInstance", () => {
+describe('Test createInstance', () => {
   for (const element of Object.values(Elements)) {
     describe(`Test ${element}`, () => {
       let instance;
 
       beforeEach(() => (instance = createInstance(element, {})));
 
-      test("append child", () => {
+      test('append child', () => {
         expect(instance.childs).toHaveLength(0);
 
         instance.appendChild(getFakeInstance());
@@ -100,7 +100,7 @@ describe("Test createInstance", () => {
         expect(instance.childs).toHaveLength(1);
       });
 
-      test("append and remove child", () => {
+      test('append and remove child', () => {
         expect(instance.childs).toHaveLength(0);
 
         const child = getFakeInstance();
@@ -112,7 +112,7 @@ describe("Test createInstance", () => {
         expect(instance.childs).toHaveLength(0);
       });
 
-      test("append and remove fake child", () => {
+      test('append and remove fake child', () => {
         expect(instance.childs).toHaveLength(0);
 
         const child = getFakeInstance();
@@ -124,7 +124,7 @@ describe("Test createInstance", () => {
         expect(instance.childs).toHaveLength(1);
       });
 
-      test("insterBefore child", () => {
+      test('insterBefore child', () => {
         expect(instance.childs).toHaveLength(0);
 
         const child = getFakeInstance();
@@ -140,7 +140,7 @@ describe("Test createInstance", () => {
         expect(instance.childs[1]).toBe(child);
       });
 
-      test("insterBefore fake child", () => {
+      test('insterBefore fake child', () => {
         expect(instance.childs).toHaveLength(0);
 
         const child = getFakeInstance();
@@ -155,7 +155,7 @@ describe("Test createInstance", () => {
         expect(instance.childs[0]).toBe(child);
       });
 
-      test("update props", () => {
+      test('update props', () => {
         expect(() => instance.update({}, {})).toThrowError();
       });
     });
@@ -165,5 +165,5 @@ describe("Test createInstance", () => {
     const creator = () => createInstance('fake', {});
 
     expect(creator).toThrowError();
-  })
+  });
 });

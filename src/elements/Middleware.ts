@@ -1,7 +1,7 @@
-import { RouteNode } from "@root/types";
+import { RouteNode } from '@root/types';
 
-import INode from "@root/elements/Node";
-import { noErrorHandler } from "@root/validation/errorHandler";
+import INode from '@root/elements/Node';
+import { noErrorHandler } from '@root/validation/errorHandler';
 
 class MiddlewareInstance extends INode<RouteNode> {
   render(): RouteNode {
@@ -15,7 +15,7 @@ class MiddlewareInstance extends INode<RouteNode> {
       path,
       handle,
       method,
-      routes
+      routes,
     };
   }
 }

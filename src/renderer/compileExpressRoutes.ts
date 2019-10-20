@@ -1,6 +1,6 @@
-import express from "express";
+import express from 'express';
 
-import { RouteNode, Elements, Methods } from "@root/types";
+import { Elements, Methods, RouteNode } from '@root/types';
 
 const allMethods = [...Object.keys(Methods), ...Object.values(Methods)];
 
@@ -80,7 +80,7 @@ export function compileRoute(
   const baseRouter = express.Router();
 
   if (node.type !== Elements.Express && node.type !== Elements.Route) {
-    throw new Error("The initial node must be Express or Route");
+    throw new Error('The initial node must be Express or Route');
   }
 
   const route = generateExpressRoutes(node.routes!, baseRouter);

@@ -1,20 +1,20 @@
-import React from "react";
+import React from 'react';
 
 import {
-  Renderer,
+  ErrorHandler,
   Express,
   Middleware,
+  Renderer,
   Route,
-  ErrorHandler
-} from "@root/index";
-import { RouteNode, Elements } from "@root/types";
+} from '@root/index';
+import { Elements, RouteNode } from '@root/types';
 
 const handlerMiddleware = Object.freeze(() => {});
 const handlerRoute = Object.freeze(() => {});
 const handlerError = Object.freeze(() => {});
 
-describe("Error Handler", () => {
-  test("Test routes and errorhandler at bottom", () => {
+describe('Error Handler', () => {
+  test('Test routes and errorhandler at bottom', () => {
     const compiled = Renderer.generate(
       <Express>
         <Route method="GET" path="/test" handle={handlerRoute} />
@@ -24,18 +24,18 @@ describe("Error Handler", () => {
     ) as RouteNode;
 
     expect(compiled.type).toBe(Elements.Express);
-    expect(compiled.path).toBe("/");
+    expect(compiled.path).toBe('/');
     expect(compiled.method).toBeUndefined();
     expect(compiled.handle).toBeUndefined();
 
     expect(compiled.routes![0].type).toBe(Elements.Route);
-    expect(compiled.routes![0].path).toBe("/test");
-    expect(compiled.routes![0].method).toBe("GET");
+    expect(compiled.routes![0].path).toBe('/test');
+    expect(compiled.routes![0].method).toBe('GET');
     expect(compiled.routes![0].handle).toBe(handlerRoute);
 
     expect(compiled.routes![1].type).toBe(Elements.Route);
-    expect(compiled.routes![1].path).toBe("/test");
-    expect(compiled.routes![1].method).toBe("POST");
+    expect(compiled.routes![1].path).toBe('/test');
+    expect(compiled.routes![1].method).toBe('POST');
     expect(compiled.routes![1].handle).toBe(handlerRoute);
 
     expect(compiled.routes![2].type).toBe(Elements.ErrorHandler);
@@ -44,7 +44,7 @@ describe("Error Handler", () => {
     expect(compiled.routes![2].handle).toBe(handlerError);
   });
 
-  test("Test routes and errorhandler at top", () => {
+  test('Test routes and errorhandler at top', () => {
     const compiled = Renderer.generate(
       <Express>
         <ErrorHandler handle={handlerError} />
@@ -54,18 +54,18 @@ describe("Error Handler", () => {
     );
 
     expect(compiled.type).toBe(Elements.Express);
-    expect(compiled.path).toBe("/");
+    expect(compiled.path).toBe('/');
     expect(compiled.method).toBeUndefined();
     expect(compiled.handle).toBeUndefined();
 
     expect(compiled.routes![0].type).toBe(Elements.Route);
-    expect(compiled.routes![0].path).toBe("/test");
-    expect(compiled.routes![0].method).toBe("GET");
+    expect(compiled.routes![0].path).toBe('/test');
+    expect(compiled.routes![0].method).toBe('GET');
     expect(compiled.routes![0].handle).toBe(handlerRoute);
 
     expect(compiled.routes![1].type).toBe(Elements.Route);
-    expect(compiled.routes![1].path).toBe("/test");
-    expect(compiled.routes![1].method).toBe("POST");
+    expect(compiled.routes![1].path).toBe('/test');
+    expect(compiled.routes![1].method).toBe('POST');
     expect(compiled.routes![1].handle).toBe(handlerRoute);
 
     expect(compiled.routes![2].type).toBe(Elements.ErrorHandler);
@@ -74,7 +74,7 @@ describe("Error Handler", () => {
     expect(compiled.routes![2].handle).toBe(handlerError);
   });
 
-  test("Test routes and twice errorhandler", () => {
+  test('Test routes and twice errorhandler', () => {
     const compile = () =>
       Renderer.generate(
         <Express>
@@ -88,7 +88,7 @@ describe("Error Handler", () => {
     expect(compile).toThrowError();
   });
 
-  test("Test error handler inside route", () => {
+  test('Test error handler inside route', () => {
     const compile = () =>
       Renderer.generate(
         <Express>
@@ -103,7 +103,7 @@ describe("Error Handler", () => {
     expect(compile).toThrowError();
   });
 
-  test("Test error handler inside middleware", () => {
+  test('Test error handler inside middleware', () => {
     const compile = () =>
       Renderer.generate(
         <Express>
