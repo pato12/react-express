@@ -43,6 +43,9 @@ export enum Methods {
   TRACE = 'trace',
   UNLOCK = 'unlock',
   UNSUBSCRIE = 'unsubscribe',
+
+  // Custom methods
+  ALL = 'all', // https://expressjs.com/en/4x/api.html#router.all
 }
 
 export type RouteHandle = (

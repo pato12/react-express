@@ -135,6 +135,28 @@ describe('Routes', () => {
     expect(resp.status).toBe(200);
     expect(resp.text).toBe('ok');
   });
+
+  test('Test ALL method', async () => {
+    const app = compile(
+      <Express>
+        <Route method={Methods.ALL} path="/test" handle={defaultHandler} />
+      </Express>
+    );
+
+    let res = await supertest(app as express.Express).get('/test');
+
+    expect(res.status).toBe(200);
+    expect(res.text).toBe('ok');
+
+    res = await supertest(app as express.Express).post('/test');
+
+    expect(res.status).toBe(200);
+    expect(res.text).toBe('ok');
+
+    res = await supertest(app as express.Express).head('/test');
+
+    expect(res.status).toBe(200);
+  });
 });
 
 describe('Middlewares', () => {
@@ -300,7 +322,12 @@ describe('Middlewares', () => {
 });
 
 describe('Test all method', () => {
-  const methods: string[] = Object.values(Methods);
+  // ignore custom methods
+  const customMethods = [Methods.ALL];
+  const methods: string[] = Object.values(Methods as Record<
+    string,
+    string
+  >).filter(m => !customMethods.includes(m));
 
   for (const method of methods) {
     test(`Test ${method} method`, async () => {
