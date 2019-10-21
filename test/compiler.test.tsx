@@ -9,9 +9,9 @@ import {
   Methods,
   Middleware,
   Route,
-} from '@root/index';
-import * as compiler from '@root/renderer/compileExpressRoutes';
-import { Elements } from '@root/types';
+} from '../src';
+import * as compiler from '../src/renderer/compileExpressRoutes';
+import { Elements } from '../src/types';
 
 describe('Routes', () => {
   test('Simple route', async () => {
@@ -259,7 +259,7 @@ describe('Middlewares', () => {
 });
 
 describe('Test all method', () => {
-  const methods = Object.values(Methods);
+  const methods: string[] = Object.values(Methods);
 
   for (const method of methods) {
     test(`Test ${method} method`, async () => {
@@ -295,10 +295,10 @@ describe('Test ErrorHandler', () => {
       </Express>
     );
 
-    const res = await supertest(app as express.Express).get('/test');
+    const resp = await supertest(app as express.Express).get('/test');
 
-    expect(res.status).toBe(500);
-    expect(res.text).toBe('error');
+    expect(resp.status).toBe(500);
+    expect(resp.text).toBe('error');
     expect(mockFn).toBeCalledTimes(1);
     expect(mockFn).toBeCalledWith(error);
   });
@@ -323,7 +323,7 @@ describe('Compiler', () => {
       path: '/',
     }) as express.Router;
 
-    expect(Object.getPrototypeOf(compiled) == express.Router).toBeTruthy();
+    expect(Object.getPrototypeOf(compiled) === express.Router).toBeTruthy();
   });
 
   test('Compile a Fake element', () => {

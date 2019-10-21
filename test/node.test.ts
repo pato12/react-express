@@ -1,6 +1,6 @@
-import { createInstance } from '@root/elements';
-import INode from '@root/elements/Node';
-import { Elements, RouteNode } from '@root/types';
+import { createInstance } from '../src/elements';
+import INode from '../src/elements/Node';
+import { Elements, RouteNode } from '../src/types';
 
 class FakeNode extends INode<RouteNode> {
   render(): RouteNode {

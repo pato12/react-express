@@ -49,7 +49,7 @@ type IErrorHandlerComponent = (
 
 interface IRouteComponentProps extends BaseComponent {
   path: PathProp;
-  method: string;
+  method: string | Methods;
   handle: Partial<RouteHandle>;
 }
 

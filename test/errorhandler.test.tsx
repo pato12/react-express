@@ -6,8 +6,8 @@ import {
   Middleware,
   Renderer,
   Route,
-} from '@root/index';
-import { Elements, RouteNode } from '@root/types';
+} from '../src/index';
+import { Elements, RouteNode } from '../src/types';
 
 const handlerMiddleware = Object.freeze(() => {});
 const handlerRoute = Object.freeze(() => {});

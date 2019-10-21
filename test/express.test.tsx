@@ -6,9 +6,9 @@ import {
   Middleware,
   Renderer,
   Route,
-} from '@root/index';
-import { Elements } from '@root/types';
-import { DEFAULT_PATH } from '@root/utils';
+} from '../src/index';
+import { Elements } from '../src/types';
+import { DEFAULT_PATH } from '../src/utils';
 
 const handlerMiddleware = Object.freeze(() => {});
 const handlerRoute = Object.freeze(() => {});
