@@ -1,3 +1,6 @@
+import * as express from 'express';
+import { ReactNode } from 'react';
+
 export type Props = Record<string, any>;
 
 export interface RouteNode {
@@ -5,7 +8,7 @@ export interface RouteNode {
   path?: string;
   method?: string;
   routes?: RouteNode[];
-  handle?(req, res, next);
+  handle?: RouteHandle | RouteHandle[];
 }
 
 export enum Elements {
@@ -41,3 +44,57 @@ export enum Methods {
   UNLOCK = 'unlock',
   UNSUBSCRIE = 'unsubscribe',
 }
+
+export type RouteHandle = (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => any;
+
+export type ErrorHandle = (
+  err: any,
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => any;
+
+export type PathProp = string | RegExp | Array<string | RegExp>;
+
+interface BaseComponent {
+  children?: ReactNode | ReactNode[];
+}
+
+interface IMiddlewareComponentProps extends BaseComponent {
+  path: PathProp;
+  handle: Partial<RouteHandle> | Array<Partial<RouteHandle>>;
+}
+
+export type IMiddlewareComponent = (
+  props: Partial<IMiddlewareComponentProps>
+) => JSX.Element;
+
+interface IExpressComponentProps extends BaseComponent {
+  path: PathProp;
+}
+
+export type IExpressComponent = (
+  props: Partial<IExpressComponentProps>
+) => JSX.Element;
+
+interface IErrorHandlerComponentProp extends BaseComponent {
+  handle: ErrorHandle;
+}
+
+export type IErrorHandlerComponent = (
+  props: IErrorHandlerComponentProp
+) => JSX.Element;
+
+interface IRouteComponentProps extends BaseComponent {
+  path: PathProp;
+  method: string | Methods;
+  handle: Partial<RouteHandle> | Array<Partial<RouteHandle>>;
+}
+
+export type IRouteComponent = (
+  props: Partial<IRouteComponentProps>
+) => JSX.Element;

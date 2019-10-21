@@ -117,6 +117,24 @@ describe('Routes', () => {
     expect(res.status).toBe(200);
     expect(res.text).toBe('ok');
   });
+
+  test('Simple route with multiple handlers', async () => {
+    const handlerPass = (req, res, next) => next();
+    const app = compile(
+      <Express>
+        <Route
+          method={Methods.GET}
+          path="/test"
+          handle={[handlerPass, handlerPass, defaultHandler]}
+        />
+      </Express>
+    );
+
+    const resp = await supertest(app as express.Express).get('/test');
+
+    expect(resp.status).toBe(200);
+    expect(resp.text).toBe('ok');
+  });
 });
 
 describe('Middlewares', () => {
@@ -255,6 +273,29 @@ describe('Middlewares', () => {
 
     expect(res.status).toBe(404);
     expect(res.text).toBe('404');
+  });
+
+  test('Simple middleware with multiple handlers', async () => {
+    const handlerPass = (req, res, next) => next();
+
+    const app = compile(
+      <Express>
+        <Middleware handle={defaultMiddlewareHandler} />
+        <Route
+          method={Methods.GET}
+          path="/test"
+          handle={[handlerPass, handlerPass, defaultHandler]}
+        />
+      </Express>
+    );
+
+    expect(mockFn).toBeCalledTimes(0);
+
+    const resp = await supertest(app as express.Express).get('/test');
+
+    expect(resp.status).toBe(200);
+    expect(resp.text).toBe('ok');
+    expect(mockFn).toBeCalledTimes(1);
   });
 });
 
