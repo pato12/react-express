@@ -48,5 +48,10 @@
   },
   "files": [
     "dist"
+  ],
+  "keywords": [
+    "react",
+    "express",
+    "router"
   ]
 }
