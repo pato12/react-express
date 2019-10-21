@@ -68,6 +68,21 @@ export function generateExpressRoutes(
       );
     } else if (route.type === Elements.ErrorHandler && route.handle) {
       baseRouter.use(route.handle);
+    } else if (
+      route.type === Elements.ParamMiddleware &&
+      route.handle &&
+      !Array.isArray(route.handle) &&
+      route.props &&
+      route.props.name
+    ) {
+      baseRouter.param(route.props.name, route.handle);
+    } else if (
+      route.type === Elements.ParamMiddleware &&
+      route.handle &&
+      !Array.isArray(route.handle)
+    ) {
+      // @ts-ignore
+      baseRouter.param(route.handle);
     }
   }
 

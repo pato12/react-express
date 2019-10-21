@@ -9,11 +9,13 @@ export interface RouteNode {
   method?: string;
   routes?: RouteNode[];
   handle?: RouteHandle | RouteHandle[];
+  props?: any;
 }
 
 export enum Elements {
   Route = 'ROUTE',
   Middleware = 'MIDDLEWARE',
+  ParamMiddleware = 'PARAMMIDDLEWARE',
   Express = 'EXPRESS',
   Root = 'ROOT',
   ErrorHandler = 'ERRORHANDLER',
@@ -53,6 +55,18 @@ export type RouteHandle = (
   res: express.Response,
   next: express.NextFunction
 ) => any;
+
+type ParamHandle = (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction,
+  val: any,
+  name: string
+) => any;
+
+type CustomParamHandle = (param: any, option: any) => any;
+
+type ValidatorParamHandle = (val: any) => any;
 
 export type ErrorHandle = (
   err: any,
@@ -100,4 +114,16 @@ interface IRouteComponentProps extends BaseComponent {
 
 export type IRouteComponent = (
   props: Partial<IRouteComponentProps>
+) => JSX.Element;
+
+interface IParamMiddlewareProps extends Omit<BaseComponent, 'children'> {
+  name?: string;
+  handle: Partial<ParamHandle>;
+}
+
+export type IParamMiddleware = (
+  props:
+    | Partial<IParamMiddlewareProps>
+    | CustomParamHandle
+    | ValidatorParamHandle
 ) => JSX.Element;

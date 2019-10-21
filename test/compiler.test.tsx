@@ -8,6 +8,7 @@ import {
   Express,
   Methods,
   Middleware,
+  ParamMiddleware,
   Route,
 } from '../src';
 import * as compiler from '../src/renderer/compileExpressRoutes';
@@ -419,3 +420,90 @@ const generateMiddlewareHandlerWithMock = name => {
   };
   return { mockFn, handler };
 };
+
+describe('ParamMiddleware', () => {
+  const handleRoute = (req, res) => {
+    res.status(200).send(req.params.id);
+  };
+
+  test('Simple ParamMiddleware', async () => {
+    const mockFn = jest.fn();
+    const handlerParamMiddleware = (req, res, next, id, name) => {
+      req.product = { id };
+      mockFn(name, id);
+      next();
+    };
+    const app = compile(
+      <Express>
+        <ParamMiddleware name="id" handle={handlerParamMiddleware} />
+        <Route method={Methods.GET} path="/product/:id" handle={handleRoute} />
+      </Express>
+    );
+
+    const resp = await supertest(app as express.Express).get('/product/10');
+
+    expect(mockFn).toBeCalledWith('id', '10');
+    expect(resp.status).toBe(200);
+    expect(resp.text).toBe('10');
+  });
+
+  describe('Customizing the behavior', () => {
+    const handleValidator = (name, validator) => {
+      return (req, res, next, val) => {
+        if (validator(val)) {
+          return next();
+        }
+        next(new Error('param not valid'));
+      };
+    };
+
+    test('Pass the validation', async () => {
+      const validateId = jest.fn(val => {
+        return !isNaN(+val);
+      });
+
+      const app = compile(
+        <Express>
+          <ParamMiddleware handle={handleValidator} />
+          <ParamMiddleware name="id" handle={validateId} />
+          <Route
+            method={Methods.GET}
+            path="/product/:id"
+            handle={handleRoute}
+          />
+        </Express>
+      );
+
+      const resp = await supertest(app as express.Express).get('/product/10');
+
+      expect(resp.status).toBe(200);
+      expect(resp.text).toBe('10');
+      expect(validateId).toBeCalledTimes(1);
+      expect(validateId).toBeCalledWith('10');
+    });
+
+    test('Fail the validation', async () => {
+      const validateId = jest.fn(val => {
+        return !isNaN(+val);
+      });
+
+      const app = compile(
+        <Express>
+          <ParamMiddleware handle={handleValidator} />
+          <ParamMiddleware name="id" handle={validateId} />
+          <Route
+            method={Methods.GET}
+            path="/product/:id"
+            handle={handleRoute}
+          />
+        </Express>
+      );
+
+      const resp = await supertest(app as express.Express).get('/product/asd');
+
+      expect(resp.status).toBe(500);
+      expect(validateId).toBeCalledTimes(1);
+      expect(validateId).toBeCalledWith('asd');
+    });
+  });
+});
