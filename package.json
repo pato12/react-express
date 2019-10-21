@@ -1,6 +1,6 @@
 {
   "name": "react-express-router",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "main": "dist/index.js",
   "license": "MIT",
   "repository": "git@github.com:pato12/react-express.git",
