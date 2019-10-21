@@ -42,7 +42,7 @@ app.listen(3000, () => {
 });
 ```
 
-and visit http://localhost:300/test to look the hello world!
+and visit http://localhost:3000/test to look the hello world!
 
 # Documentation
 
