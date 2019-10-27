@@ -1,11 +1,11 @@
 import express from 'express';
 
-import { Elements, Methods, RouteNode } from '@root/types';
+import { Elements, Methods, ComponentsProps } from '@root/types';
 
 const allMethods = [...Object.keys(Methods), ...Object.values(Methods)];
 
 export function generateExpressRoutes(
-  routes: RouteNode[],
+  routes: ComponentsProps[],
   baseRouter: express.Router
 ): express.Router {
   for (const route of routes) {
@@ -72,10 +72,9 @@ export function generateExpressRoutes(
       route.type === Elements.ParamMiddleware &&
       route.handle &&
       !Array.isArray(route.handle) &&
-      route.props &&
-      route.props.name
+      route.name
     ) {
-      baseRouter.param(route.props.name, route.handle);
+      baseRouter.param(route.name, route.handle);
     } else if (
       route.type === Elements.ParamMiddleware &&
       route.handle &&
@@ -90,7 +89,7 @@ export function generateExpressRoutes(
 }
 
 export function compileRoute(
-  node: RouteNode
+  node: ComponentsProps
 ): express.Express | express.Router {
   const baseRouter = express.Router();
 

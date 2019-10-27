@@ -1,10 +1,10 @@
-import { RouteNode } from '@root/types';
+import { ComponentsProps, Elements } from '@root/types';
 
 import INode from '@root/elements/Node';
 import { DEFAULT_PATH } from '@root/utils';
 import { noErrorHandler } from '@root/validation/errorHandler';
 
-class RouteInstance extends INode<RouteNode> {
+class RouteInstance extends INode<Elements.Route> {
   constructor(type, props) {
     super(type, props);
     this.props = {
@@ -13,14 +13,14 @@ class RouteInstance extends INode<RouteNode> {
     };
   }
 
-  render(): RouteNode {
+  render(): ComponentsProps {
     const { path, handle, method } = this.props;
     const routes = this.childs.map(c => c.render());
 
     noErrorHandler(routes);
 
     return {
-      type: this.type,
+      type: Elements.Route,
       path,
       handle,
       method,

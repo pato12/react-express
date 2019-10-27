@@ -6,7 +6,8 @@
     "interface-name": false,
     "member-access": false,
     "object-literal-sort-keys": false,
-    "no-empty": false
+    "no-empty": false,
+    "ordered-imports": false
   },
   "linterOptions": {
     "exclude": ["examples/**/*"]

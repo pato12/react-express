@@ -1,5 +1,9 @@
 import { createInstance } from '@root/elements';
-import { Elements, Props, RouteNode } from '@root/types';
+import {
+  Elements,
+  ComponentsProps,
+  DiscriminateComponentProps,
+} from '@root/types';
 import Reconciler from 'react-reconciler';
 
 import { compileRoute } from './compileExpressRoutes';
@@ -21,8 +25,8 @@ const HostConfig = {
     throw new Error('createTextInstance not supported');
   },
   createInstance(
-    type: string,
-    newProps: Props,
+    type: Elements,
+    newProps: ComponentsProps,
     rootContainerInstance,
     currentHostContext,
     workInProgress
@@ -91,9 +95,9 @@ const CustomRenderer = {
 
     reconcilerInstance.updateContainer(element, mountNode, null);
 
-    return rootContainer.render() as RouteNode;
+    return rootContainer.render();
   },
-  compile(generated: RouteNode) {
+  compile(generated: ComponentsProps) {
     return compileRoute(generated);
   },
 };

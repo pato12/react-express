@@ -1,16 +1,57 @@
 import * as express from 'express';
 import { ReactNode } from 'react';
 
-export type Props = Record<string, any>;
-
-export interface RouteNode {
-  type?: string;
-  path?: string;
-  method?: string;
-  routes?: RouteNode[];
-  handle?: RouteHandle | RouteHandle[];
-  props?: any;
+interface ErrorHandlerProps {
+  type: Elements.ErrorHandler;
+  handle: RouteHandle;
 }
+interface MiddlewareProps {
+  type: Elements.Middleware;
+  handle: RouteHandle;
+  path?: PathProp;
+  method?: Methods | string;
+  routes: ComponentsProps[];
+}
+
+interface ParamMiddlewareProps {
+  type: Elements.ParamMiddleware;
+  handle: RouteHandle;
+  path?: PathProp;
+  method?: Methods | string;
+  routes: ComponentsProps[];
+  name?: string;
+}
+
+interface RootProps {
+  type: Elements.Root;
+  routes: ComponentsProps[];
+}
+
+interface ExpressProps {
+  type: Elements.Express;
+  path?: PathProp;
+  routes: ComponentsProps[];
+}
+
+interface RouteProps {
+  type: Elements.Route;
+  handle: RouteHandle;
+  path?: PathProp;
+  method?: Methods | string;
+  routes: ComponentsProps[];
+}
+
+export type ComponentsProps =
+  | ErrorHandlerProps
+  | MiddlewareProps
+  | ParamMiddlewareProps
+  | RootProps
+  | ExpressProps
+  | RouteProps;
+
+export type DiscriminateComponentProps<
+  T extends ComponentsProps['type']
+> = Extract<ComponentsProps, { type: T }>;
 
 export enum Elements {
   Route = 'ROUTE',

@@ -1,13 +1,13 @@
-import { RouteNode } from '@root/types';
+import { Elements, ComponentsProps } from '@root/types';
 
 import INode from '@root/elements/Node';
 
-class ErrorHandler extends INode<RouteNode> {
-  render(): RouteNode {
+class ErrorHandler extends INode<Elements.ErrorHandler> {
+  render(): ComponentsProps {
     const { handle } = this.props;
 
     return {
-      type: this.type,
+      type: Elements.ErrorHandler,
       handle,
     };
   }

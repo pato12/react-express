@@ -1,16 +1,17 @@
-import { Elements, Props } from '@root/types';
+import { Elements, ComponentsProps } from '@root/types';
 
 import ErrorHandlerInstance from './ErrorHandler';
 import MiddlewareInstance from './Middleware';
 import ParamMiddlewareInstance from './ParamMiddleware';
 import RootInstance from './Root';
+import ExpressInstance from './Express';
 import RouteInstance from './Route';
 
-export function createInstance(type: string, props?: Props) {
+export function createInstance(type: Elements, props?: ComponentsProps) {
   if (type === Elements.Express) {
-    return new RootInstance(Elements.Express, props);
+    return new ExpressInstance(Elements.Express, props as any);
   } else if (type === Elements.Root) {
-    return new RootInstance(Elements.Root, props);
+    return new RootInstance(Elements.Root, props as any);
   } else if (type === Elements.Middleware) {
     return new MiddlewareInstance(Elements.Middleware, props as any);
   } else if (type === Elements.Route) {

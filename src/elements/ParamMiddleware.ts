@@ -1,24 +1,18 @@
-import { RouteNode } from '@root/types';
+import { Elements, ComponentsProps } from '@root/types';
 
 import INode from '@root/elements/Node';
 
-interface ParamMiddlewareInstanceProps {
-  name: string;
-}
-
-class ParamMiddlewareInstance extends INode<
-  RouteNode & ParamMiddlewareInstanceProps
-> {
-  render(): RouteNode {
+class ParamMiddlewareInstance extends INode<Elements.ParamMiddleware> {
+  render(): ComponentsProps {
     const { path, handle, method, name } = this.props;
 
     return {
-      type: this.type,
+      type: Elements.ParamMiddleware,
       path,
       handle,
       method,
       routes: [],
-      props: { name },
+      name,
     };
   }
 }

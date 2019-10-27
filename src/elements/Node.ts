@@ -1,8 +1,15 @@
-import { Props, RouteNode } from '@root/types';
+import {
+  DiscriminateComponentProps,
+  ComponentsProps,
+  Elements,
+} from '@root/types';
 
-abstract class INode<T = Props> {
+abstract class INode<T extends Elements = any> {
   protected childs: INode[];
-  constructor(public type: string, public props: T) {
+  constructor(
+    public type: Elements,
+    public props: DiscriminateComponentProps<T>
+  ) {
     this.childs = [];
   }
 
@@ -24,11 +31,14 @@ abstract class INode<T = Props> {
     }
   }
 
-  update(oldProps: T, newProps: T) {
+  update(
+    oldProps: DiscriminateComponentProps<T>,
+    newProps: DiscriminateComponentProps<T>
+  ) {
     throw new Error(`Update is not supported at ${this.type}`);
   }
 
-  abstract render(): RouteNode;
+  abstract render(): ComponentsProps;
 }
 
 export default INode;
