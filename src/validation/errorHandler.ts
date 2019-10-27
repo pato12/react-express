@@ -1,6 +1,6 @@
-import { Elements, RouteNode } from '@root/types';
+import { Elements, ComponentsProps } from '@root/types';
 
-export function noErrorHandler(routes: RouteNode[]) {
+export function noErrorHandler(routes: ComponentsProps[]) {
   const errorHandlers = routes.filter(n => n.type === Elements.ErrorHandler);
 
   if (errorHandlers.length > 0) {
@@ -10,7 +10,7 @@ export function noErrorHandler(routes: RouteNode[]) {
   }
 }
 
-export function twiceErrorHandler(routes: RouteNode[]) {
+export function twiceErrorHandler(routes: ComponentsProps[]) {
   const errorHandlers = routes.filter(n => n.type === Elements.ErrorHandler);
 
   if (errorHandlers.length > 1) {

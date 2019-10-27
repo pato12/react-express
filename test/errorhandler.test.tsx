@@ -7,7 +7,7 @@ import {
   Renderer,
   Route,
 } from '../src/index';
-import { Elements, RouteNode } from '../src/types';
+import { Elements } from '../src/types';
 
 const handlerMiddleware = Object.freeze(() => {});
 const handlerRoute = Object.freeze(() => {});
@@ -21,7 +21,7 @@ describe('Error Handler', () => {
         <Route method="POST" path="/test" handle={handlerRoute} />
         <ErrorHandler handle={handlerError} />
       </Express>
-    ) as RouteNode;
+    ) as any;
 
     expect(compiled.type).toBe(Elements.Express);
     expect(compiled.path).toBe('/');
