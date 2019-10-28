@@ -7,7 +7,7 @@
   <img src="https://img.shields.io/github/stars/pato12/react-express?style=social">
 </p>
 
-React Express Router is a wrapper of the Express APIs to use they like a react components.
+React Express Router is a declarative router that wrap Express APIs to use they like a react components.
 
 ## How to install
 
@@ -31,13 +31,13 @@ const handlerHelloWorld = (req, res) => {
   res.send('Hello world!');
 };
 
-const app = compile(
+const app = (
   <Express>
     <Route path="/test" method="GET" handle={handlerHelloWorld} />
   </Express>
 );
 
-app.listen(3000, () => {
+compile(app).listen(3000, () => {
   console.log('Example app listening on port 3000!');
 });
 ```
@@ -58,16 +58,20 @@ and visit http://localhost:3000/test to look the hello world!
 
 This components is used to wrap all routes/middlewares. And when it's compiled returns an Application instance.
 
+| Prop | Description | Value                                      | Default   |
+| ---- | ----------- | ------------------------------------------ | --------- |
+| path | Root path.  | `string | RegExp | Array<string | RegExp>` | undefined |
+
 Example:
 
 ```jsx
-const app = compile(
+const app = (
   <Express>
     <Route path="/test" method="GET" handle={handlerHelloWorld} />
   </Express>
 );
 
-app.listen(3000, () => {
+compile(app).listen(3000, () => {
   console.log('Example app listening on port 3000!');
 });
 ```
@@ -76,10 +80,17 @@ app.listen(3000, () => {
 
 With this component you can define a middleware. Also you can wrap routes/middlewares with it.
 
+| Prop   | Description                                        | Value                                      | Default   |
+| ------ | -------------------------------------------------- | ------------------------------------------ | --------- |
+| path   | Access path.                                       | `string | RegExp | Array<string | RegExp>` | undefined |
+| handle | Action to execute when the middleware is triggered | `function(req, res, next)`                 | -         |
+
+More info: http://expressjs.com/en/guide/writing-middleware.html#writing-middleware-for-use-in-express-apps
+
 Example:
 
 ```jsx
-const app = compile(
+const app = (
   <Express>
     <Middleware handle={bodyParser.json()} />
     <Route path="/user" method="POST" handle={handlerUserCreation} />
@@ -89,7 +100,7 @@ const app = compile(
 ```
 
 ```jsx
-const app = compile(
+const app = (
   <Express>
     <Middleware handle={authMiddleware}>
       <Route path="/dashboard" method="GET" handle={handlerDashboard} />
@@ -101,7 +112,7 @@ const app = compile(
 ```
 
 ```jsx
-const app = compile(
+const app = (
   <Express>
     <Middleware path="/account" handle={authMiddleware}>
       <Route path="/apps" method="GET" handle={handlerApps} />{' '}
@@ -115,8 +126,24 @@ const app = compile(
 
 ### Route
 
+Probably the most important component. It has the responsibility to catch the current request.
+
+| Prop          | Description                                            | Value                                      | Default   |
+| ------------- | ------------------------------------------------------ | ------------------------------------------ | --------- |
+| path          | Access path.                                           | `string | RegExp | Array<string | RegExp>` | undefined |
+| method        | The http method.                                       | `get | post | put`                         | -         |
+| handle        | Action to execute when the route is triggered          | `function(req, res, next)`                 | -         |
+| caseSensitive | Enable case sensitivity.                               | `boolean`                                  | false     |
+| mergeParams   | Preserve the req.params values from the parent router. | `boolean`                                  | false     |
+| strict        | Enable strict routing.                                 | `boolean`                                  | false     |
+
+Full list of methods: http://expressjs.com/en/4x/api.html#app.METHOD
+More info: http://expressjs.com/en/guide/routing.html
+
+Examples:
+
 ```jsx
-const app = compile(
+const app = (
   <Express>
     <Route path="/" method="GET" handle={handlerDefaultPage} />
     <Route path="/about" method="GET" handle={handlerAboutPage} />
@@ -132,7 +159,7 @@ const app = compile(
 
 ```jsx
 // also you can nested more routes
-const app = compile(
+const app = (
   <Express>
     <Route path="/" method="GET" handle={handlerDefaultPage} />
     <Route path="/about" method="GET" handle={handlerAboutPage} />
@@ -156,10 +183,16 @@ const app = compile(
 
 ### ErrorHandler
 
+Component to catch and process an error with the request. Only one per app.
+
+| Prop   | Description                                           | Value                           | Default |
+| ------ | ----------------------------------------------------- | ------------------------------- | ------- |
+| handle | Action to execute when the error handler is triggered | `function(err, req, res, next)` | -       |
+
+More info: http://expressjs.com/en/guide/error-handling.html#error-handling
+
 ```jsx
-// the handlerError is a function that need to have a signature: (err, req, res, next)
-// more info in https://expressjs.com/en/guide/error-handling.html
-const app = compile(
+const app = (
   <Express>
     <Route path="/" method="GET" handle={handlerDefaultPage} />
     <ErrorHandler handle={handlerError} />
@@ -169,19 +202,59 @@ const app = compile(
 
 ### ParamMiddleware
 
-TODO
+This middleware is used to handler custom params.
+
+| Prop   | Description                                           | Value                                 | Default   |
+| ------ | ----------------------------------------------------- | ------------------------------------- | --------- |
+| name   | Name of the param (optional)                          | `string`                              | undefined |
+| handle | Action to execute when the error handler is triggered | `function(req, res, next, val, name)` | -         |
+
+More info: http://expressjs.com/en/api.html#app.param
 
 ### Custom Components
 
-TODO
+Also you can create your own components with the native components.
+
+Example:
+
+```jsx
+const UserRouter = () => (
+  <Middleware path="/user" handle={handlerUserAuth}>
+    <Route path="/" method="GET" handle={handlerUserPage} />
+    <Route path="/settings" method="GET" handle={handlerUserSettings} />
+  </Middleware>
+);
+
+const app = (
+  <Express>
+    <Route path="/" method="GET" handle={handlerDefaultPage} />
+    <UserRouter />
+    <ErrorHandler handle={handlerError} />
+  </Express>
+);
+```
 
 ### Compile a Route
 
-TODO
+And you can compile a router and integrate it with your current app.
+
+```jsx
+const UserRouter = () => (
+  <Route>
+    <Middleware path="/user" handle={handlerUserAuth}>
+      <Route path="/" method="GET" handle={handlerUserPage} />
+      <Route path="/settings" method="GET" handle={handlerUserSettings} />
+    </Middleware>
+  </Route>
+);
+
+const app = express();
+
+app.use(pageRouter);
+app.use(compile(<UserRouter />));
+```
 
 ## Next steps
 
 - Improve the documentation
-- Refactor props handler
-- Implement options to the Route when it wrap others
 - Implement a component to use `express.static`, `express.json` and `express.urlencoded`
