@@ -22,10 +22,15 @@ describe('Routes', () => {
       </Express>
     );
 
-    const res = await supertest(app as express.Express).get('/test');
+    let resp = await supertest(app as express.Express).get('/test');
 
-    expect(res.status).toBe(200);
-    expect(res.text).toBe('ok');
+    expect(resp.status).toBe(200);
+    expect(resp.text).toBe('ok');
+
+    resp = await supertest(app as express.Express).get('/test/');
+
+    expect(resp.status).toBe(200);
+    expect(resp.text).toBe('ok');
   });
 
   test('Simples route with child', async () => {
@@ -157,6 +162,63 @@ describe('Routes', () => {
     res = await supertest(app as express.Express).head('/test');
 
     expect(res.status).toBe(200);
+  });
+
+  test('Simple route stric mode', async () => {
+    const app = compile(
+      <Express>
+        <Route strict={true}>
+          <Route method={Methods.GET} path="/test" handle={defaultHandler} />
+        </Route>
+        <Middleware handle={handlerOf404} />
+      </Express>
+    );
+
+    let resp = await supertest(app as express.Express).get('/test');
+
+    expect(resp.status).toBe(200);
+    expect(resp.text).toBe('ok');
+
+    resp = await supertest(app as express.Express).get('/test/');
+
+    expect(resp.status).toBe(404);
+  });
+
+  test('Simple route case sensitive mode', async () => {
+    const app = compile(
+      <Express>
+        <Route caseSensitive={true}>
+          <Route method={Methods.GET} path="/test" handle={defaultHandler} />
+        </Route>
+        <Middleware handle={handlerOf404} />
+      </Express>
+    );
+
+    let resp = await supertest(app as express.Express).get('/test');
+
+    expect(resp.status).toBe(200);
+    expect(resp.text).toBe('ok');
+
+    resp = await supertest(app as express.Express).get('/Test');
+
+    expect(resp.status).toBe(404);
+  });
+
+  test('Simple route with merge params', async () => {
+    const handlerId = (req, res) => res.send(req.params.id);
+    const app = compile(
+      <Express>
+        <Route path="/:id" mergeParams={true}>
+          <Route method={Methods.GET} path="/details" handle={handlerId} />
+        </Route>
+        <Middleware handle={handlerOf404} />
+      </Express>
+    );
+
+    const resp = await supertest(app as express.Express).get('/10/details');
+
+    expect(resp.status).toBe(200);
+    expect(resp.text).toBe('10');
   });
 });
 

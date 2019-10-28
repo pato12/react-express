@@ -14,7 +14,15 @@ class RouteInstance extends INode<Elements.Route> {
   }
 
   render(): ComponentsProps {
-    const { path, handle, method } = this.props;
+    const {
+      path,
+      handle,
+      method,
+      strict,
+      caseSensitive,
+      mergeParams,
+    } = this.props;
+
     const routes = this.childs.map(c => c.render());
 
     noErrorHandler(routes);
@@ -25,6 +33,9 @@ class RouteInstance extends INode<Elements.Route> {
       handle,
       method,
       routes,
+      strict,
+      caseSensitive,
+      mergeParams,
     };
   }
 }

@@ -1,6 +1,11 @@
 import express from 'express';
 
-import { Elements, Methods, ComponentsProps } from '@root/types';
+import {
+  Elements,
+  Methods,
+  ComponentsProps,
+  DiscriminateComponentProps,
+} from '@root/types';
 
 const allMethods = [...Object.keys(Methods), ...Object.values(Methods)];
 
@@ -49,7 +54,7 @@ export function generateExpressRoutes(
       route.routes &&
       route.routes.length > 0
     ) {
-      const nextBaseRouter = express.Router();
+      const nextBaseRouter = express.Router(getRouterConfig(route));
 
       baseRouter.use(
         route.path,
@@ -107,4 +112,20 @@ export function compileRoute(
   }
 
   return route;
+}
+
+function getRouterConfig(
+  props: DiscriminateComponentProps<Elements.Route>
+): express.RouterOptions | undefined {
+  if (
+    props.caseSensitive !== undefined ||
+    props.mergeParams !== undefined ||
+    props.strict !== undefined
+  ) {
+    return {
+      caseSensitive: props.caseSensitive,
+      mergeParams: props.mergeParams,
+      strict: props.strict,
+    };
+  }
 }

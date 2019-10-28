@@ -39,6 +39,9 @@ interface RouteProps {
   path?: PathProp;
   method?: Methods | string;
   routes: ComponentsProps[];
+  caseSensitive?: boolean;
+  mergeParams?: boolean;
+  strict?: boolean;
 }
 
 export type ComponentsProps =
@@ -147,14 +150,20 @@ export type IErrorHandlerComponent = (
   props: IErrorHandlerComponentProp
 ) => JSX.Element;
 
-interface IRouteComponentProps extends BaseComponent {
+interface IRouteComponentProps {
   path: PathProp;
   method: string | Methods;
   handle: Partial<RouteHandle> | Array<Partial<RouteHandle>>;
 }
 
+interface IRouteComponentWithOptionsProps extends BaseComponent {
+  caseSensitive?: boolean;
+  mergeParams?: boolean;
+  strict?: boolean;
+}
+
 export type IRouteComponent = (
-  props: Partial<IRouteComponentProps>
+  props: Partial<IRouteComponentProps> | IRouteComponentWithOptionsProps
 ) => JSX.Element;
 
 interface IParamMiddlewareProps extends Omit<BaseComponent, 'children'> {
