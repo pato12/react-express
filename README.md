@@ -58,9 +58,9 @@ and visit http://localhost:3000/test to look the hello world!
 
 This components is used to wrap all routes/middlewares. And when it's compiled returns an Application instance.
 
-| Prop | Description | Value                                      | Default   |
-| ---- | ----------- | ------------------------------------------ | --------- |
-| path | Root path.  | `string | RegExp | Array<string | RegExp>` | undefined |
+| Prop | Description | Value                                         | Default   |
+| ---- | ----------- | --------------------------------------------- | --------- |
+| path | Root path.  | `string \| RegExp \| Array<string \| RegExp>` | undefined |
 
 Example:
 
@@ -80,10 +80,10 @@ compile(app).listen(3000, () => {
 
 With this component you can define a middleware. Also you can wrap routes/middlewares with it.
 
-| Prop   | Description                                        | Value                                      | Default   |
-| ------ | -------------------------------------------------- | ------------------------------------------ | --------- |
-| path   | Access path.                                       | `string | RegExp | Array<string | RegExp>` | undefined |
-| handle | Action to execute when the middleware is triggered | `function(req, res, next)`                 | -         |
+| Prop   | Description                                        | Value                                         | Default   |
+| ------ | -------------------------------------------------- | --------------------------------------------- | --------- |
+| path   | Access path.                                       | `string \| RegExp \| Array<string \| RegExp>` | undefined |
+| handle | Action to execute when the middleware is triggered | `function(req, res, next)`                    | -         |
 
 More info: http://expressjs.com/en/guide/writing-middleware.html#writing-middleware-for-use-in-express-apps
 
@@ -128,14 +128,14 @@ const app = (
 
 Probably the most important component. It has the responsibility to catch the current request.
 
-| Prop          | Description                                            | Value                                      | Default   |
-| ------------- | ------------------------------------------------------ | ------------------------------------------ | --------- |
-| path          | Access path.                                           | `string | RegExp | Array<string | RegExp>` | undefined |
-| method        | The http method.                                       | `get | post | put`                         | -         |
-| handle        | Action to execute when the route is triggered          | `function(req, res, next)`                 | -         |
-| caseSensitive | Enable case sensitivity.                               | `boolean`                                  | false     |
-| mergeParams   | Preserve the req.params values from the parent router. | `boolean`                                  | false     |
-| strict        | Enable strict routing.                                 | `boolean`                                  | false     |
+| Prop          | Description                                            | Value                                         | Default   |
+| ------------- | ------------------------------------------------------ | --------------------------------------------- | --------- |
+| path          | Access path.                                           | `string \| RegExp \| Array<string \| RegExp>` | undefined |
+| method        | The http method. See the full list below.              | `get \| post \| put`                          | -         |
+| handle        | Action to execute when the route is triggered          | `function(req, res, next)`                    | -         |
+| caseSensitive | Enable case sensitivity.                               | `boolean`                                     | false     |
+| mergeParams   | Preserve the req.params values from the parent router. | `boolean`                                     | false     |
+| strict        | Enable strict routing.                                 | `boolean`                                     | false     |
 
 Full list of methods: http://expressjs.com/en/4x/api.html#app.METHOD
 More info: http://expressjs.com/en/guide/routing.html
