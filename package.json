@@ -42,7 +42,7 @@
     "typescript-transform-paths": "^1.1.11"
   },
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "react": "^16.10.2",
     "react-reconciler": "^0.22.2"
   },
